@@ -2154,19 +2154,19 @@ const path = __webpack_require__(0);
 const rmdir = __webpack_require__(21);
 class DynaDiskMemory {
     constructor(settings) {
-        this.settings = Object.assign({ fragmentSize: 13 }, settings);
+        this._settings = Object.assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
-            this.settings.diskPath += '/';
+            this._settings.diskPath += '/';
     }
     set(container, key, data) {
-        return this.saveFile(container, key, data);
+        return this._saveFile(container, key, data);
     }
     get(container, key) {
-        return this.loadFile(container, key);
+        return this._loadFile(container, key);
     }
     del(container, key) {
         return new Promise((resolve, reject) => {
-            this.generateFilename(container, key)
+            this._generateFilename(container, key)
                 .then((fileNames_) => {
                 const fileName = fileNames_.full;
                 fs.unlink(fileName, function (err) {
@@ -2178,48 +2178,48 @@ class DynaDiskMemory {
     }
     delContainer(container) {
         return new Promise((resolve, reject) => {
-            rmdir(`${this.settings.diskPath}${container}`, (error) => {
+            rmdir(`${this._settings.diskPath}${container}`, (error) => {
                 error && reject(error) || resolve();
             });
         });
     }
     delAll() {
         return new Promise((resolve, reject) => {
-            rmdir(this.settings.diskPath, (error) => {
+            rmdir(this._settings.diskPath, (error) => {
                 error && reject(error) || resolve();
             });
         });
     }
-    saveFile(container, key, data) {
+    _saveFile(container, key, data) {
         return new Promise((resolve, reject) => {
             let fileNames;
-            this.generateFilename(container, key)
+            this._generateFilename(container, key)
                 .then((fileNames_) => {
                 fileNames = fileNames_;
-                return this.createDirectory(fileNames.folder);
+                return this._createDirectory(fileNames.folder);
             })
                 .then(() => {
-                this.writeFileOnDisk(fileNames.folder, fileNames.file, data)
+                this._writeFileOnDisk(fileNames.folder, fileNames.file, data)
                     .then(() => resolve())
                     .catch(reject);
             })
                 .catch(reject);
         });
     }
-    loadFile(container, key) {
+    _loadFile(container, key) {
         return new Promise((resolve, reject) => {
             let fileNames;
-            this.generateFilename(container, key)
+            this._generateFilename(container, key)
                 .then((fileNames_) => {
                 fileNames = fileNames_;
-                this.readFileFromDisk(fileNames.folder, fileNames.file)
+                this._readFileFromDisk(fileNames.folder, fileNames.file)
                     .then((data) => resolve(data))
                     .catch(reject);
             })
                 .catch(reject);
         });
     }
-    createDirectory(directory) {
+    _createDirectory(directory) {
         // todo: make this async
         return new Promise((resolve, reject) => {
             try {
@@ -2238,7 +2238,7 @@ class DynaDiskMemory {
             }
         });
     }
-    writeFileOnDisk(folder, fileName, data) {
+    _writeFileOnDisk(folder, fileName, data) {
         return new Promise((resolve, reject) => {
             fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err) => {
                 if (err)
@@ -2248,7 +2248,7 @@ class DynaDiskMemory {
             });
         });
     }
-    readFileFromDisk(folder, fileName) {
+    _readFileFromDisk(folder, fileName) {
         return new Promise((resolve, reject) => {
             fs.readFile(`${folder}/${fileName}`, 'utf8', (err, data) => {
                 if (err)
@@ -2258,22 +2258,22 @@ class DynaDiskMemory {
             });
         });
     }
-    generateFilename(container, key) {
+    _generateFilename(container, key) {
         return new Promise((resolve, reject) => {
-            const generatedKey = this.splitText(this.getAsciiCodeHash(key), this.settings.fragmentSize, '/');
-            const full = `${this.settings.diskPath}${escape(container)}/${generatedKey}`;
+            const generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
+            const full = `${this._settings.diskPath}${escape(container)}/${generatedKey}`;
             const folder = full.substr(0, full.lastIndexOf('/'));
             const file = full.substr(full.lastIndexOf('/') + 1);
             resolve({ full, folder, file });
         });
     }
-    getAsciiCodeHash(key) {
+    _getAsciiCodeHash(key) {
         return key
             .split('')
             .map((c) => c.charCodeAt(0))
             .join('_');
     }
-    splitText(text, step, separetor) {
+    _splitText(text, step, separetor) {
         let output = "";
         let se = text.split('').reverse();
         while (se.length)
