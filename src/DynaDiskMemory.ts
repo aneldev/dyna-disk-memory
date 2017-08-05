@@ -24,6 +24,7 @@ export class DynaDiskMemory {
   }
 
   private _settings: ISettings;
+  public _test_performDiskDelay: number = 0;
 
   public set(container: string, key: string, data: any): Promise<undefined> {
     return this._saveFile(container, key, data);
@@ -103,23 +104,27 @@ export class DynaDiskMemory {
 
   private _writeFileOnDisk(folder: string, fileName: string, data: any): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err: any) => {
-        if (err)
-          reject({errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err});
-        else
-          resolve();
-      });
+      setTimeout(() => {
+        fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err: any) => {
+          if (err)
+            reject({errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err});
+          else
+            resolve();
+        });
+      }, this._test_performDiskDelay);
     });
   }
 
   private _readFileFromDisk(folder: string, fileName: string): Promise<any> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      fs.readFile(`${folder}/${fileName}`, 'utf8', (err: any, data: any) => {
-        if (err)
-          reject({errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err});
-        else
-          resolve(JSON.parse(data));
-      });
+      setTimeout(() => {
+        fs.readFile(`${folder}/${fileName}`, 'utf8', (err: any, data: any) => {
+          if (err)
+            reject({errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err});
+          else
+            resolve(JSON.parse(data));
+        });
+      }, this._test_performDiskDelay);
     });
   }
 

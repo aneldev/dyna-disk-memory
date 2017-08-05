@@ -7,6 +7,7 @@ import {forTimes} from './utils/loops'
 import {randomText} from './utils/randomText';
 
 let ddm: DynaDiskMemory = new DynaDiskMemory({diskPath: './temp/dynaDiskMemoryTest'});
+ddm._test_performDiskDelay = 100;
 
 const chinese:string = '把百度设为主页关于百度';
 

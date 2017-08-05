@@ -5,6 +5,7 @@ export interface ISettings {
 export declare class DynaDiskMemory {
     constructor(settings: ISettings);
     private _settings;
+    _test_performDiskDelay: number;
     set(container: string, key: string, data: any): Promise<undefined>;
     get(container: string, key: string): Promise<any>;
     del(container: string, key: string): Promise<any>;

@@ -2153,6 +2153,7 @@ const path = __webpack_require__(0);
 const rmdir = __webpack_require__(21);
 class DynaDiskMemory {
     constructor(settings) {
+        this._test_performDiskDelay = 0;
         this._settings = Object.assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
@@ -2226,22 +2227,26 @@ class DynaDiskMemory {
     }
     _writeFileOnDisk(folder, fileName, data) {
         return new Promise((resolve, reject) => {
-            fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err) => {
-                if (err)
-                    reject({ errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err });
-                else
-                    resolve();
-            });
+            setTimeout(() => {
+                fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err) => {
+                    if (err)
+                        reject({ errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err });
+                    else
+                        resolve();
+                });
+            }, this._test_performDiskDelay);
         });
     }
     _readFileFromDisk(folder, fileName) {
         return new Promise((resolve, reject) => {
-            fs.readFile(`${folder}/${fileName}`, 'utf8', (err, data) => {
-                if (err)
-                    reject({ errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err });
-                else
-                    resolve(JSON.parse(data));
-            });
+            setTimeout(() => {
+                fs.readFile(`${folder}/${fileName}`, 'utf8', (err, data) => {
+                    if (err)
+                        reject({ errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err });
+                    else
+                        resolve(JSON.parse(data));
+                });
+            }, this._test_performDiskDelay);
         });
     }
     _generateFilename(container, key) {
