@@ -2147,8 +2147,8 @@ exports.DynaDiskMemory = DynaDiskMemory_1.DynaDiskMemory;
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
 /// <reference path="../node_modules/@types/node/index.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __webpack_require__(1);
 const path = __webpack_require__(0);
 const rmdir = __webpack_require__(21);
@@ -2260,8 +2260,9 @@ class DynaDiskMemory {
     }
     _generateFilename(container, key) {
         return new Promise((resolve, reject) => {
+            const generatedContainer = this._getAsciiCodeHash(container);
             const generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
-            const full = `${this._settings.diskPath}${escape(container)}/${generatedKey}`;
+            const full = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
             const folder = full.substr(0, full.lastIndexOf('/'));
             const file = full.substr(full.lastIndexOf('/') + 1);
             resolve({ full, folder, file });

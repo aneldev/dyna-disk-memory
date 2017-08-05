@@ -1,5 +1,4 @@
 /// <reference path="../node_modules/@types/node/index.d.ts" />
-declare const escape: any;
 
 const fs = require('fs');
 const path = require('path');
@@ -140,9 +139,10 @@ export class DynaDiskMemory {
 
   private _generateFilename(container: string, key: string): Promise<IFolderFile> {
     return new Promise((resolve: (output: IFolderFile) => void, reject: (error: any) => void) => {
+      const generatedContainer: string = this._getAsciiCodeHash(container);
       const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
 
-      const full: string = `${this._settings.diskPath}${escape(container)}/${generatedKey}`;
+      const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
       const folder: string = full.substr(0, full.lastIndexOf('/'));
       const file: string = full.substr(full.lastIndexOf('/') + 1);
 
@@ -164,7 +164,5 @@ export class DynaDiskMemory {
     if (output[output.length - 1] == separetor) output += '_fc';
     return output;
   }
-
-
 }
 
