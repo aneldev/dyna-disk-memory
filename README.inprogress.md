@@ -79,9 +79,9 @@ The only error can be occured can be from disk.
 
 Returns the`data` from this `container` for this `key`.
 
-Returns a Promise, `resolve: (data: any) => void` with the saved data and `reject: (error:any) => void`.
+Returns a Promise, `resolve: (data: any) => void` with the saved data.
 
-The error can be occured if the key not found.
+If `key` not found the `resolve` will returned with `data: undefined`;
 
 ## del(container: string, key: string): Promise<any>
 
@@ -105,13 +105,13 @@ Returns a Promise, `resolve: Function` when the deletion completed and `reject: 
 
 ## When can we get a disk error
 
-Only when something is wrong with your disk! Is not a case to get an error because of a folders trouble or something like this! Under the hood, the folders and the files have small names that consistent only from numbers. So it is impossible to have problem with folders.
+Only when something is wrong with your disk! Is not a case to get an error because of a folders trouble or something like this! Under the hood, the folders and the files have small names that consistent only from numbers. So it is impossible to have system problem with folders.
 
 The only error you can expect is on `get()` if the key doesn't exist.
 
 # It is tested!
 
-Run `npm run test-only` and see how it works to your system, 
+Run `npm run test-only` and see how it works to your system.
 
 # For geeks
 

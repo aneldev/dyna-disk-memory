@@ -37,14 +37,11 @@ export class DynaDiskMemory {
 
   public del(container: string, key: string): Promise<any> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      this._generateFilename(container, key)
-        .then((fileNames_: IFolderFile) => {
-          const fileName: string = fileNames_.full;
-          fs.unlink(fileName, function (err: any) {
-            err && reject(err) || resolve();
-          });
-        })
-        .catch(reject);
+      const fileName: string = this._generateFilename(container, key).full;
+
+      fs.unlink(fileName, function (err: any) {
+        err && reject(err) || resolve();
+      });
     });
   }
 
@@ -66,13 +63,9 @@ export class DynaDiskMemory {
 
   private _saveFile(container: string, key: string, data: any): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      let fileNames: IFolderFile;
+      let fileNames: IFolderFile = this._generateFilename(container, key);
 
-      this._generateFilename(container, key)
-        .then((fileNames_: IFolderFile) => {
-          fileNames = fileNames_;
-          return this._createDirectory(fileNames.folder);
-        })
+      this._createDirectory(fileNames.folder)
         .then(() => {
           this._writeFileOnDisk(fileNames.folder, fileNames.file, data)
             .then(() => resolve())
@@ -84,16 +77,11 @@ export class DynaDiskMemory {
 
   private _loadFile(container: string, key: string): Promise<any> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      let fileNames: IFolderFile;
+      let fileNames: IFolderFile = this._generateFilename(container, key);
 
-      this._generateFilename(container, key)
-        .then((fileNames_: IFolderFile) => {
-          fileNames = fileNames_;
-          this._readFileFromDisk(fileNames.folder, fileNames.file)
-            .then((data: any) => resolve(data))
-            .catch(reject);
-        })
-        .catch(reject);
+      this._readFileFromDisk(fileNames.folder, fileNames.file)
+        .then((data: any) => resolve(data))
+        .catch((error:any)=> resolve(undefined));
     });
   }
 
@@ -137,8 +125,7 @@ export class DynaDiskMemory {
     });
   }
 
-  private _generateFilename(container: string, key: string): Promise<IFolderFile> {
-    return new Promise((resolve: (output: IFolderFile) => void, reject: (error: any) => void) => {
+  private _generateFilename(container: string, key: string): IFolderFile {
       const generatedContainer: string = this._getAsciiCodeHash(container);
       const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
 
@@ -146,8 +133,7 @@ export class DynaDiskMemory {
       const folder: string = full.substr(0, full.lastIndexOf('/'));
       const file: string = full.substr(full.lastIndexOf('/') + 1);
 
-      resolve({full, folder, file});
-    });
+      return{full, folder, file};
   }
 
   private _getAsciiCodeHash(key: string): string {
