@@ -2147,7 +2147,6 @@ exports.DynaDiskMemory = DynaDiskMemory_1.DynaDiskMemory;
 
 "use strict";
 
-/// <reference path="../node_modules/@types/node/index.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs = __webpack_require__(1);
 const path = __webpack_require__(0);
