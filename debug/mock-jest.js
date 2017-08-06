@@ -25,6 +25,8 @@ global.describe = (description, cbDefineIts) => {
   startTests();
 };
 
+global.describe.skip = () => undefined;
+
 global.it = (description, cbTest) => {
   global._mockJest.descriptions[global._mockJest.descriptions.length - 1].its.push({
     description,
@@ -33,25 +35,26 @@ global.it = (description, cbTest) => {
   startTests();
 };
 
+global.it.skip = () => undefined;
 
-global.expect = (valueA) => {
-  return comparisons(valueA);
+global.expect = (expectValue) => {
+  return comparisons(expectValue);
 };
 
-let comparisons = (valueA, not = false) => {
+let comparisons = (expectValue, not = false) => {
   return {
     get not() {
-      return comparisons(valueA, true)
+      return comparisons(expectValue, true)
     },
-    toBe: (valueB) => {
-      let result = valueA === valueB;
+    toBe: (toBeValue) => {
+      let result = expectValue === toBeValue;
       if (not) result = !result;
       if (result) {
-        console.log('        Success, equal value');
+        console.log('        Success, === equal value');
         global._mockJest.passed++;
       }
       else {
-        console.log('        FAILED, equal value');
+        console.log(`        FAILED, expected [${expectValue}] but received [${toBeValue}]`);
         global._mockJest.errors++;
       }
     }
