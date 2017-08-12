@@ -2167,8 +2167,15 @@ class DynaDiskMemory {
     del(container, key) {
         return new Promise((resolve, reject) => {
             const fileName = this._generateFilename(container, key).full;
-            fs.unlink(fileName, function (err) {
-                err && reject(err) || resolve();
+            fs.exists(fileName, function (exists) {
+                if (exists) {
+                    fs.unlink(fileName, function (err) {
+                        err && reject(err) || resolve();
+                    });
+                }
+                else {
+                    reject({ errorMessage: `DynaDiskMemory: del: cannot find to del file for container [${container}] and key [${key}]`, fileName });
+                }
             });
         });
     }
@@ -2240,11 +2247,19 @@ class DynaDiskMemory {
     _readFileFromDisk(folder, fileName) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
-                fs.readFile(`${folder}/${fileName}`, 'utf8', (err, data) => {
-                    if (err)
-                        reject({ errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err });
-                    else
-                        resolve(JSON.parse(data));
+                const fullFileName = `${folder}/${fileName}`;
+                fs.exists(fullFileName, function (exists) {
+                    if (exists) {
+                        fs.readFile(fullFileName, 'utf8', (err, data) => {
+                            if (err)
+                                reject({ errorMessage: `Cannot read file [${fullFileName}]`, error: err });
+                            else
+                                resolve(JSON.parse(data));
+                        });
+                    }
+                    else {
+                        reject({ errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName });
+                    }
                 });
             }, this._test_performDiskDelay);
         });

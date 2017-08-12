@@ -1,6 +1,6 @@
 // help: https://facebook.github.io/jest/docs/expect.html
 declare let jasmine: any, describe: any, expect: any, it: any;
-jasmine.getEnv().defaultTimeoutInterval = 10000;
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
 import {DynaDiskMemory} from './../src';
 import {forTimes} from './utils/loops'
@@ -10,6 +10,7 @@ let ddm: DynaDiskMemory = new DynaDiskMemory({diskPath: './temp/dynaDiskMemoryTe
 ddm._test_performDiskDelay = 100;
 
 const chinese:string = '把百度设为主页关于百度';
+const TEST_ITEMS_AMOUNT:number = 100; // dev note: decrease this for debugging
 
 describe('My Module Person tests', () => {
 
@@ -31,6 +32,7 @@ describe('My Module Person tests', () => {
   });
 
   it('should get this key', (done: Function) => {
+    debugger;
     ddm.get('books', '#39922323')
       .then((data: any) => {
         expect(data.title).toBe('Gone with the wind');
@@ -47,9 +49,9 @@ describe('My Module Person tests', () => {
 
   // write / read 100 keys delete in the mean time
 
-  it('should set a 100 keys with large data', (done: Function) => {
+  it(`should set a ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
     let success: number = 0;
-    forTimes(100, (i: number) => {
+    forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
       ddm.set(
         'books', `${i}-superdooperkey`,
         {title: `Test book with key ${i}`, pages: i*23, price: i*0.87, isbn: `02760245N4353-${i}`}
@@ -57,7 +59,7 @@ describe('My Module Person tests', () => {
         .then(() => {
           expect(true).toBe(true);
           success++;
-          if (success === 100) done();
+          if (success === TEST_ITEMS_AMOUNT) done();
         })
         .catch((error: any) => {
           expect(error).toBe(null);
@@ -65,9 +67,9 @@ describe('My Module Person tests', () => {
     });
   });
 
-  it('should get the 100 keys with large data', (done: Function) => {
+  it(`should get the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
     let success: number = 0;
-    forTimes(100, (i: number) => {
+    forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
       ddm.get('books', `${i}-superdooperkey`)
         .then((data) => {
           expect(data.title).toBe(`Test book with key ${i}`);
@@ -75,7 +77,7 @@ describe('My Module Person tests', () => {
           expect(data.price).toBe( i*0.87);
           expect(data.isbn).toBe( `02760245N4353-${i}`);
           success++;
-          if (success === 100) done();
+          if (success === TEST_ITEMS_AMOUNT) done();
         })
         .catch((error: any) => {
           expect(error).toBe(null);
@@ -107,9 +109,9 @@ describe('My Module Person tests', () => {
       })
   });
 
-  it('should get again the 100 keys with large data', (done: Function) => {
+  it(`should get again the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
     let success: number = 0;
-    forTimes(100, (i: number) => {
+    forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
       ddm.get('books', `${i}-superdooperkey`)
         .then((data) => {
           expect(data.title).toBe(`Test book with key ${i}`);
@@ -117,7 +119,7 @@ describe('My Module Person tests', () => {
           expect(data.price).toBe( i*0.87);
           expect(data.isbn).toBe( `02760245N4353-${i}`);
           success++;
-          if (success === 100) done();
+          if (success === TEST_ITEMS_AMOUNT) done();
         })
         .catch((error: any) => {
           expect(error).toBe(null);
@@ -128,11 +130,9 @@ describe('My Module Person tests', () => {
 
   // test small to large keys
 
-  const testKeyLength :number =100;
-
-  it('should set a keys from small to big key length (max 100)', (done: Function) => {
+  it(`should set a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: Function) => {
     let success: number = 0;
-    forTimes(testKeyLength, (i: number) => {
+    forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
       let key: string = '';
       forTimes(i + 1, () => key += '.');
       ddm.set(
@@ -142,7 +142,7 @@ describe('My Module Person tests', () => {
         .then(() => {
           expect(true).toBe(true);
           success++;
-          if (success === testKeyLength) done();
+          if (success === TEST_ITEMS_AMOUNT) done();
         })
         .catch((error: any) => {
           expect(error).toBe(null);
@@ -150,9 +150,9 @@ describe('My Module Person tests', () => {
     });
   });
 
-  it('should get a keys from small to big key length (max 100)', (done: Function) => {
+  it(`should get a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: Function) => {
     let success: number = 0;
-    forTimes(testKeyLength, (i: number) => {
+    forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
       let key: string = '';
       forTimes(i + 1, () => key += '.');
       ddm.get('magazines', key)
@@ -161,7 +161,7 @@ describe('My Module Person tests', () => {
           expect(data.price).toBe( i*0.87);
           expect(data.barcode).toBe( `9981155481${i}`);
           success++;
-          if (success === testKeyLength) done();
+          if (success === TEST_ITEMS_AMOUNT) done();
         })
         .catch((error: any) => {
           expect(error).toBe(null);

@@ -38,8 +38,15 @@ export class DynaDiskMemory {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const fileName: string = this._generateFilename(container, key).full;
 
-      fs.unlink(fileName, function (err: any) {
-        err && reject(err) || resolve();
+      fs.exists(fileName, function (exists: boolean) {
+        if (exists) {
+          fs.unlink(fileName, function (err: any) {
+            err && reject(err) || resolve();
+          });
+        }
+        else {
+          reject({errorMessage: `DynaDiskMemory: del: cannot find to del file for container [${container}] and key [${key}]`, fileName});
+        }
       });
     });
   }
@@ -80,7 +87,7 @@ export class DynaDiskMemory {
 
       this._readFileFromDisk(fileNames.folder, fileNames.file)
         .then((data: any) => resolve(data))
-        .catch((error:any)=> resolve(undefined));
+        .catch((error: any) => resolve(undefined));
     });
   }
 
@@ -118,25 +125,33 @@ export class DynaDiskMemory {
   private _readFileFromDisk(folder: string, fileName: string): Promise<any> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       setTimeout(() => {
-        fs.readFile(`${folder}/${fileName}`, 'utf8', (err: any, data: any) => {
-          if (err)
-            reject({errorMessage: `Cannot read file [${folder}/${fileName}]`, error: err});
-          else
-            resolve(JSON.parse(data));
+        const fullFileName: string = `${folder}/${fileName}`;
+        fs.exists(fullFileName, function (exists: boolean) {
+          if (exists) {
+            fs.readFile(fullFileName, 'utf8', (err: any, data: any) => {
+              if (err)
+                reject({errorMessage: `Cannot read file [${fullFileName}]`, error: err});
+              else
+                resolve(JSON.parse(data));
+            });
+          }
+          else {
+            reject({errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName});
+          }
         });
       }, this._test_performDiskDelay);
     });
   }
 
   private _generateFilename(container: string, key: string): IFolderFile {
-      const generatedContainer: string = this._getAsciiCodeHash(container);
-      const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
+    const generatedContainer: string = this._getAsciiCodeHash(container);
+    const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
 
-      const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
-      const folder: string = full.substr(0, full.lastIndexOf('/'));
-      const file: string = full.substr(full.lastIndexOf('/') + 1);
+    const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
+    const folder: string = full.substr(0, full.lastIndexOf('/'));
+    const file: string = full.substr(full.lastIndexOf('/') + 1);
 
-      return{full, folder, file};
+    return {full, folder, file};
   }
 
   private _getAsciiCodeHash(key: string): string {
