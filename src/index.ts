@@ -1,7 +1,7 @@
-import {ISettings, DynaDiskMemory} from './DynaDiskMemory';
-
+import {ISettings} from './interfaces';
+import {DynaDiskMemoryUniversal as DynaDiskMemory} from './DynaDiskMemoryUniversal';
 
 export {
-  DynaDiskMemory,
   ISettings,
+  DynaDiskMemory,
 }

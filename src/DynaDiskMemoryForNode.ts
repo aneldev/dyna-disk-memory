@@ -2,10 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
-export interface ISettings {
-  fragmentSize?: number;
-  diskPath: string;
-}
+import {ISettings, IDynaDiskMemory} from './interfaces';
 
 interface IFolderFile {
   full: string;
@@ -13,7 +10,7 @@ interface IFolderFile {
   file: string;
 }
 
-export class DynaDiskMemory {
+export class DynaDiskMemoryForNode implements IDynaDiskMemory{
   constructor(settings: ISettings) {
     this._settings = {
       fragmentSize: 13,
@@ -34,7 +31,7 @@ export class DynaDiskMemory {
     return this._loadFile(container, key);
   }
 
-  public del(container: string, key: string): Promise<any> {
+  public del(container: string, key: string): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const fileName: string = this._generateFilename(container, key).full;
 
