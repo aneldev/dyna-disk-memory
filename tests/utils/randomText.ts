@@ -1,4 +1,4 @@
-export const randomText: string[] = [
+export const randomTextSmall: string[] = [
   '.',
   '..',
   '...',
@@ -177,8 +177,11 @@ export const randomText: string[] = [
   'Abode to tried do thing maids.',
   'Doubtful disposed returned rejoiced to dashwood is so up. Doubtful disposed returned rejoiced to dashwood is so up.',
   '把百度设为主页关于百度',
-  // '把百度设为主页关于百度 把百度设为主页关于百度',
-  // '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
-  // '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
-  // '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
 ];
+
+export const randomTextBig: string[] = randomTextSmall.concat([
+  '把百度设为主页关于百度 把百度设为主页关于百度',
+  '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
+  '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
+  '把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度 把百度设为主页关于百度',
+]);

@@ -1,14 +1,11 @@
-export interface ISettings {
-    fragmentSize?: number;
-    diskPath: string;
-}
-export declare class DynaDiskMemory {
+import { ISettings, IDynaDiskMemory } from './interfaces';
+export declare class DynaDiskMemoryForNode implements IDynaDiskMemory {
     constructor(settings: ISettings);
     private _settings;
     _test_performDiskDelay: number;
     set(container: string, key: string, data: any): Promise<undefined>;
     get(container: string, key: string): Promise<any>;
-    del(container: string, key: string): Promise<any>;
+    del(container: string, key: string): Promise<undefined>;
     delContainer(container: string): Promise<undefined>;
     delAll(): Promise<undefined>;
     private _saveFile(container, key, data);
