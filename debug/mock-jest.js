@@ -50,11 +50,11 @@ let comparisons = (expectValue, not = false) => {
       let result = expectValue === toBeValue;
       if (not) result = !result;
       if (result) {
-        console.log('        Success, === equal value');
+        // console.log('        Success, === equal value');
         global._mockJest.passed++;
       }
       else {
-        console.log(`        FAILED, expected [${expectValue}] but received [${toBeValue}]`);
+        console.log(`        FAILED, expected [${toBeValue}] but received [${expectValue}]`);
         global._mockJest.errors++;
       }
     }
