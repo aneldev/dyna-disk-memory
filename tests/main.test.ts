@@ -1,11 +1,16 @@
 // help: https://facebook.github.io/jest/docs/expect.html
 declare let jasmine: any, describe: any, expect: any, it: any;
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
 import {isNode, env} from 'dyna-universal';
 import {DynaDiskMemory} from './../src';
 import {forTimes} from 'dyna-loops'
 import {randomTextBig, randomTextSmall} from './utils/randomText';
+
+const STRESS_MODE: Boolean = true; // default for this test: true
+
+const TEST_ITEMS_AMOUNT: number = STRESS_MODE ? 100 : 5;
+const PERFORM_DISK_DELAY: number = STRESS_MODE ? 100 : 2;
 
 const createTest = (forNode: boolean) => {
   // localStorage polyfill
@@ -19,11 +24,9 @@ const createTest = (forNode: boolean) => {
     diskPath: './temp/dynaDiskMemoryTest',
     _test_workForBrowser: !forNode,
   });
-  ddm._test_performDiskDelay = 100;
+  ddm._test_performDiskDelay = PERFORM_DISK_DELAY;
 
-  const TEST_ITEMS_AMOUNT: number = 100; // dev note: decrease this for debugging
-
-  describe('Dyna disk text for ' + (forNode ? 'node' : 'browser'), () => {
+  describe('Dyna disk test for ' + (forNode ? 'node' : 'browser'), () => {
 
     // write / read one key
 
@@ -43,13 +46,61 @@ const createTest = (forNode: boolean) => {
     });
 
     it('should get this key', (done: Function) => {
-      debugger;
       ddm.get('books', '#39922323')
         .then((data: any) => {
           expect(data.title).toBe('Gone with the wind');
           expect(data.pages).toBe(2000);
           expect(data.price).toBe(23.23);
           expect(data.isbn).toBe('02760245N4353');
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        });
+    });
+
+    // write and rewrite shorter key
+
+    it('should set a key with big data size', (done: Function) => {
+      ddm.set(
+        'books', '#305986703624',
+        {
+          title: 'Gone with the wind', pages: 2000, price: 23.23, isbn: '02760245N4353',
+          someBigData: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+        }
+      )
+        .then(() => {
+          expect(true).toBe(true);
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        });
+    });
+
+    it('should set again the same key with smaller data size', (done: Function) => {
+      ddm.set(
+        'books', '#305986703624',
+        {title: 'Gone with the wind', pages: 2000, price: 23.23}
+      )
+        .then(() => {
+          expect(true).toBe(true);
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        });
+    });
+
+    it('should get the key with the smaller data size correctly', (done: Function) => {
+      ddm.get('books', '#305986703624')
+        .then((data: any) => {
+          expect(data.title).toBe('Gone with the wind');
+          expect(data.pages).toBe(2000);
+          expect(data.price).toBe(23.23);
           done();
         })
         .catch((error: any) => {

@@ -244,12 +244,17 @@ class DynaDiskMemoryForNode {
     }
     _writeFileOnDisk(folder, fileName, data) {
         return new Promise((resolve, reject) => {
+            const fullPath = `${folder}/${fileName}`;
             setTimeout(() => {
-                fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err) => {
-                    if (err)
-                        reject({ errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err });
-                    else
-                        resolve();
+                fs.exists(fullPath, (exists) => {
+                    if (exists)
+                        fs.unlinkSync(fullPath);
+                    fs.writeFile(`${fullPath}`, JSON.stringify(data), (err) => {
+                        if (err)
+                            reject({ errorMessage: `Cannot write file [${fullPath}]`, error: err });
+                        else
+                            resolve();
+                    });
                 });
             }, this._test_performDiskDelay);
         });
@@ -313,7 +318,7 @@ exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const dyna_universal_1 = __webpack_require__(5);
+const dyna_universal_1 = __webpack_require__(4);
 const DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
 const DynaDiskMemoryForNode_1 = __webpack_require__(2);
 class DynaDiskMemoryUniversal {
@@ -351,36 +356,6 @@ exports.DynaDiskMemoryUniversal = DynaDiskMemoryUniversal;
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function (module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function () {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function get() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function get() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -508,7 +483,37 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		/******/)
 	);
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
 
 /***/ }),
 /* 6 */

@@ -10,7 +10,7 @@ interface IFolderFile {
   file: string;
 }
 
-export class DynaDiskMemoryForNode implements IDynaDiskMemory{
+export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   constructor(settings: ISettings) {
     this._settings = {
       fragmentSize: 13,
@@ -108,12 +108,16 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory{
 
   private _writeFileOnDisk(folder: string, fileName: string, data: any): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
+      const fullPath: string = `${folder}/${fileName}`;
       setTimeout(() => {
-        fs.writeFile(`${folder}/${fileName}`, JSON.stringify(data), (err: any) => {
-          if (err)
-            reject({errorMessage: `Cannot write file [${folder}/${fileName}]`, error: err});
-          else
-            resolve();
+        fs.exists(fullPath, (exists: boolean) => {
+          if (exists) fs.unlinkSync(fullPath);
+          fs.writeFile(`${fullPath}`, JSON.stringify(data), (err: any) => {
+            if (err)
+              reject({errorMessage: `Cannot write file [${fullPath}]`, error: err});
+            else
+              resolve();
+          });
         });
       }, this._test_performDiskDelay);
     });
@@ -166,8 +170,8 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory{
     return output;
   }
 
-  private _rmdir(file, cb: (error: any)=> void):void{
-    exec('rm -rf ' + file, function (err: any, stdout: any, stderr:any) {
+  private _rmdir(file, cb: (error: any) => void): void {
+    exec('rm -rf ' + file, function (err: any, stdout: any, stderr: any) {
       cb(err);
     });
   }
