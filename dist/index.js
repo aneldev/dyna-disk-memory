@@ -313,7 +313,7 @@ exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const dyna_universal_1 = __webpack_require__(4);
+const dyna_universal_1 = __webpack_require__(5);
 const DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
 const DynaDiskMemoryForNode_1 = __webpack_require__(2);
 class DynaDiskMemoryUniversal {
@@ -351,6 +351,36 @@ exports.DynaDiskMemoryUniversal = DynaDiskMemoryUniversal;
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -460,6 +490,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 			exports.isBrowser = function () {
 				return !exports.isNode();
 			};
+			var env = typeof window !== 'undefined' && window || global;
+			exports.env = env;
+			env.env = env;
+			env.isNode = exports.isNode();
+			env.isBrowser = !env.isNode;
 
 			/***/
 		},
@@ -473,37 +508,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 		/******/)
 	);
 });
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-module.exports = function (module) {
-	if (!module.webpackPolyfill) {
-		module.deprecate = function () {};
-		module.paths = [];
-		// module.parent = undefined by default
-		if (!module.children) module.children = [];
-		Object.defineProperty(module, "loaded", {
-			enumerable: true,
-			get: function get() {
-				return module.l;
-			}
-		});
-		Object.defineProperty(module, "id", {
-			enumerable: true,
-			get: function get() {
-				return module.i;
-			}
-		});
-		module.webpackPolyfill = 1;
-	}
-	return module;
-};
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)(module)))
 
 /***/ }),
 /* 6 */
