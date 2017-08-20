@@ -1,14 +1,22 @@
 # About
 
-`dyna disk memory` is a simple data holder where uses only the disk. Ideal for node.js application that they don't want to use the expensive memory but their server's disk. 
+`dyna disk memory` is a simple data holder where uses only the disk. Ideal for node.js applications and services that they don't want to use the expensive memory but their server's disk.
 
 The performance is not the same as the physical memory, as it uses the disk but in now days the ssd disks are much faster and also this library splits the files in small folders so the system uses smaller indices to locate a file. This mechanism is implemented and used first time from this library.
 
-So `dyna disk memory` is intended for large amount of temporary or permanent data with high perfomance according the disk.
+So `dyna disk memory` is intended for large amount of temporary or permanent data with high performance according the disk.
 
 The API is really simple and has nothing to do with files etc, all this _hard job_ is part of this library.
 
 If your project is in Typescript then voila, `dyna disk memory` it is too (you'll become good friends). But anyway can be used from any javascript enviroment.
+
+# Is Universal
+
+Is universal. On browser it uses the `localStorage` so on browser the data limit is the limit browser's `localStorage`.
+
+**But why support browsers?**
+
+Ideal for micro services, web workers that run both in node.js and browsers and want to save permanent data.
 
 # Data structure
 
@@ -109,16 +117,16 @@ Only when something is wrong with your disk! Is not a case to get an error becau
 
 The only error you can expect is on `get()` if the key doesn't exist.
 
-# It is tested!
-
-Run `npm run test-only` and see how it works to your system.
-
 # For geeks
 
-The code is very simple! If you dive into you will see that whole code is only 160 lines! The only dependency is the `rimraf`.
+The code is very simple! If you dive into you will see that whole code is only 160 lines! 
+
+**No dependencies!**
 
 # The future
 
 There is no thoughts to extend this library. It is doing something very specific and it is doing this well. Other amazing libraries can be built using this, like: queue handlers, network buffers that they don't want to loose their data if they crashed. 
 
+# Debug, Form, Liberté!
 
+This project made with [dyna-ts-module-boilerplate](https://github.com/aneldev/dyna-ts-module-boilerplate), help of it is [here in readme.boilerplate](./readme.boilerplate.md).
