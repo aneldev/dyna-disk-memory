@@ -22,6 +22,7 @@
     "debug-inspector": "node-debug ./debug-ground/debug-on-nodejs/index.js  && npm run debug-inspector",
     "debug-inspector-brk": "node-debug --debug-brk ./debug-ground/debug-on-nodejs/index.js  && npm run debug-inspector-brk",
     "debug-tsc-watch": "rimraf temp && cd debug && tsc --w",
+    "run-debug-build": "cd debug-ground/debug-on-nodejs && node index.js && cd ../..",
     "release": "npm run dist",
     "dist": "rimraf ./dist/ && npm run .build-index.d.ts && npm run .build-dist",
     ".build-index.d.ts": "tsc && rm ./dist/index.js && npm run .build-index.d.ts-clear",

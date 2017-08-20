@@ -1,17 +1,17 @@
 // help: https://facebook.github.io/jest/docs/expect.html
-declare let global: any, jasmine: any, describe: any, expect: any, it: any;
+declare let jasmine: any, describe: any, expect: any, it: any;
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
-import {isNode} from 'dyna-universal';
+import {isNode, env} from 'dyna-universal';
 import {DynaDiskMemory} from './../src';
 import {forTimes} from 'dyna-loops'
 import {randomTextBig, randomTextSmall} from './utils/randomText';
 
 const createTest = (forNode: boolean) => {
   // localStorage polyfill
-  if (!forNode && (typeof global.LocalStorage === "undefined" || global.LocalStorage === null)) {
+  if (!forNode && (typeof env.localStorage === "undefined" || env.localStorage === null)) {
     const LocalStorage = require('node-localstorage').LocalStorage;
-    global.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
+    env.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
   }
   let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
 
