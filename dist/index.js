@@ -315,9 +315,7 @@ exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 Object.defineProperty(exports, "__esModule", { value: true });
 const dyna_universal_1 = __webpack_require__(4);
 const DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
-let DynaDiskMemoryForNode = null;
-if (dyna_universal_1.isNode())
-    DynaDiskMemoryForNode = __webpack_require__(2).DynaDiskMemoryForNode;
+const DynaDiskMemoryForNode_1 = __webpack_require__(2);
 class DynaDiskMemoryUniversal {
     constructor(settings) {
         this._test_performDiskDelay = 0;
@@ -327,7 +325,7 @@ class DynaDiskMemoryUniversal {
         if (this._settings._test_workForBrowser)
             this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
         else if (dyna_universal_1.isNode())
-            this._memory = new DynaDiskMemoryForNode(this._settings);
+            this._memory = new DynaDiskMemoryForNode_1.DynaDiskMemoryForNode(this._settings);
         else
             this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
         this._memory._test_performDiskDelay = this._test_performDiskDelay;

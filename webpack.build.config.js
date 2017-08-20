@@ -9,7 +9,7 @@ const package = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
 const loaders = require('./webpack.loaders');
 
 const config = {
-  target: 'node',
+  target: 'node', // help: https://webpack.github.io/docs/configuration.html#target
   entry: [
 		// the entry application code
 		path.resolve(__dirname, 'src/index.ts')

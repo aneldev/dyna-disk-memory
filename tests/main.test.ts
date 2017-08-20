@@ -265,7 +265,7 @@ const createTest = (forNode: boolean) => {
 // RUN test tests
 
 // if the test runs under node, then test the DynaDiskMemoryForNode
-if (isNode()) createTest(true);
+//if (isNode()) createTest(true);
 
 // regardless the environment, test the DynaDiskMemoryForBrowser
 // (in case of node.js the localStorage polyfill will be applied)

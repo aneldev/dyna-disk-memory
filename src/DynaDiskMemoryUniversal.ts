@@ -2,9 +2,7 @@ import {isNode} from 'dyna-universal';
 import {IDynaDiskMemory, ISettings} from './interfaces';
 
 import {DynaDiskMemoryForBrowser} from './DynaDiskMemoryForBrowser';
-
-let DynaDiskMemoryForNode = null;
-if (isNode()) DynaDiskMemoryForNode = require('./DynaDiskMemoryForNode').DynaDiskMemoryForNode;
+import {DynaDiskMemoryForNode} from './DynaDiskMemoryForNode';
 
 export class DynaDiskMemoryUniversal {
   constructor(settings: ISettings) {
