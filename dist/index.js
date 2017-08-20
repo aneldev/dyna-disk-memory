@@ -7,7 +7,7 @@
 		exports["dyna-disk-memory"] = factory(require("child_process"), require("fs"), require("path"));
 	else
 		root["dyna-disk-memory"] = factory(root["child_process"], root["fs"], root["path"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -147,9 +147,6 @@ class DynaDiskMemoryForBrowser {
         const file = full.substr(full.lastIndexOf('/') + 1);
         return { full, base, folder, file };
     }
-    _isNode() {
-        return typeof process === 'object' && typeof process.versions === 'object';
-    }
 }
 exports.DynaDiskMemoryForBrowser = DynaDiskMemoryForBrowser;
 
@@ -161,9 +158,9 @@ exports.DynaDiskMemoryForBrowser = DynaDiskMemoryForBrowser;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __webpack_require__(5);
-const path = __webpack_require__(6);
-const exec = __webpack_require__(4).exec;
+const fs = __webpack_require__(7);
+const path = __webpack_require__(8);
+const exec = __webpack_require__(6).exec;
 class DynaDiskMemoryForNode {
     constructor(settings) {
         this._test_performDiskDelay = 0;
@@ -305,9 +302,6 @@ class DynaDiskMemoryForNode {
             cb(err);
         });
     }
-    _isNode() {
-        return typeof process === 'object' && typeof process.versions === 'object';
-    }
 }
 exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 
@@ -319,16 +313,21 @@ exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const DynaDiskMemoryForNode_1 = __webpack_require__(2);
+const dyna_universal_1 = __webpack_require__(4);
 const DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
+let DynaDiskMemoryForNode = null;
+if (dyna_universal_1.isNode())
+    DynaDiskMemoryForNode = __webpack_require__(2).DynaDiskMemoryForNode;
 class DynaDiskMemoryUniversal {
     constructor(settings) {
         this._test_performDiskDelay = 0;
-        this._settings = Object.assign({ fragmentSize: 13 }, settings);
+        this._settings = Object.assign({ fragmentSize: 13, _test_workForBrowser: false, _test_performDiskDelay: 0 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
-        if (this._isNode(!!this._settings._test_workForBrowser))
-            this._memory = new DynaDiskMemoryForNode_1.DynaDiskMemoryForNode(this._settings);
+        if (this._settings._test_workForBrowser)
+            this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
+        else if (dyna_universal_1.isNode())
+            this._memory = new DynaDiskMemoryForNode(this._settings);
         else
             this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
         this._memory._test_performDiskDelay = this._test_performDiskDelay;
@@ -348,35 +347,186 @@ class DynaDiskMemoryUniversal {
     delAll() {
         return this._memory.delAll();
     }
-    _isNode(_test_workForBrowser) {
-        if (_test_workForBrowser)
-            return false;
-        return typeof process === 'object' && typeof process.versions === 'object';
-    }
 }
 exports.DynaDiskMemoryUniversal = DynaDiskMemoryUniversal;
 
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("child_process");
+"use strict";
+/* WEBPACK VAR INJECTION */(function(module) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+(function webpackUniversalModuleDefinition(root, factory) {
+	if (( false ? 'undefined' : _typeof(exports)) === 'object' && ( false ? 'undefined' : _typeof(module)) === 'object') module.exports = factory();else if (true) !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') exports["dyna-universal"] = factory();else root["dyna-universal"] = factory();
+})(undefined, function () {
+	return (/******/function (modules) {
+			// webpackBootstrap
+			/******/ // The module cache
+			/******/var installedModules = {};
+			/******/
+			/******/ // The require function
+			/******/function __webpack_require__(moduleId) {
+				/******/
+				/******/ // Check if module is in cache
+				/******/if (installedModules[moduleId]) {
+					/******/return installedModules[moduleId].exports;
+					/******/
+				}
+				/******/ // Create a new module (and put it into the cache)
+				/******/var module = installedModules[moduleId] = {
+					/******/i: moduleId,
+					/******/l: false,
+					/******/exports: {}
+					/******/ };
+				/******/
+				/******/ // Execute the module function
+				/******/modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+				/******/
+				/******/ // Flag the module as loaded
+				/******/module.l = true;
+				/******/
+				/******/ // Return the exports of the module
+				/******/return module.exports;
+				/******/
+			}
+			/******/
+			/******/
+			/******/ // expose the modules object (__webpack_modules__)
+			/******/__webpack_require__.m = modules;
+			/******/
+			/******/ // expose the module cache
+			/******/__webpack_require__.c = installedModules;
+			/******/
+			/******/ // identity function for calling harmony imports with the correct context
+			/******/__webpack_require__.i = function (value) {
+				return value;
+			};
+			/******/
+			/******/ // define getter function for harmony exports
+			/******/__webpack_require__.d = function (exports, name, getter) {
+				/******/if (!__webpack_require__.o(exports, name)) {
+					/******/Object.defineProperty(exports, name, {
+						/******/configurable: false,
+						/******/enumerable: true,
+						/******/get: getter
+						/******/ });
+					/******/
+				}
+				/******/
+			};
+			/******/
+			/******/ // getDefaultExport function for compatibility with non-harmony modules
+			/******/__webpack_require__.n = function (module) {
+				/******/var getter = module && module.__esModule ?
+				/******/function getDefault() {
+					return module['default'];
+				} :
+				/******/function getModuleExports() {
+					return module;
+				};
+				/******/__webpack_require__.d(getter, 'a', getter);
+				/******/return getter;
+				/******/
+			};
+			/******/
+			/******/ // Object.prototype.hasOwnProperty.call
+			/******/__webpack_require__.o = function (object, property) {
+				return Object.prototype.hasOwnProperty.call(object, property);
+			};
+			/******/
+			/******/ // __webpack_public_path__
+			/******/__webpack_require__.p = "/dist/";
+			/******/
+			/******/ // Load entry module and return exports
+			/******/return __webpack_require__(__webpack_require__.s = 1);
+			/******/
+		}(
+		/************************************************************************/
+		/******/[
+		/* 0 */
+		/***/function (module, exports, __webpack_require__) {
+
+			"use strict";
+
+			Object.defineProperty(exports, "__esModule", { value: true });
+			exports.isNode = function () {
+				return !!(typeof process !== 'undefined' && process.versions && process.versions.node);
+			};
+			exports.isBrowser = function () {
+				return !exports.isNode();
+			};
+
+			/***/
+		},
+		/* 1 */
+		/***/function (module, exports, __webpack_require__) {
+
+			module.exports = __webpack_require__(0);
+
+			/***/
+		}]
+		/******/)
+	);
+});
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)(module)))
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("fs");
+"use strict";
+
+
+module.exports = function (module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function () {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function get() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function get() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
 
 /***/ }),
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("child_process");
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+module.exports = require("fs");
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
+
+module.exports = require("path");
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(0);

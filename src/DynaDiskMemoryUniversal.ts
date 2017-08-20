@@ -1,20 +1,28 @@
-import {DynaDiskMemoryForNode} from './DynaDiskMemoryForNode';
+import {isNode} from 'dyna-universal';
+import {IDynaDiskMemory, ISettings} from './interfaces';
+
 import {DynaDiskMemoryForBrowser} from './DynaDiskMemoryForBrowser';
 
-import {IDynaDiskMemory, ISettings} from './interfaces';
+let DynaDiskMemoryForNode = null;
+if (isNode()) DynaDiskMemoryForNode = require('./DynaDiskMemoryForNode').DynaDiskMemoryForNode;
 
 export class DynaDiskMemoryUniversal {
   constructor(settings: ISettings) {
     this._settings = {
       fragmentSize: 13,
+      _test_workForBrowser: false,
+      _test_performDiskDelay: 0,
       ...settings
     };
     if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
 
-    if (this._isNode(!!this._settings._test_workForBrowser))
+    if (this._settings._test_workForBrowser)
+      this._memory = new DynaDiskMemoryForBrowser(this._settings);
+    else if (isNode())
       this._memory = new DynaDiskMemoryForNode(this._settings);
     else
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
+
     this._memory._test_performDiskDelay = this._test_performDiskDelay;
   }
 
@@ -41,11 +49,5 @@ export class DynaDiskMemoryUniversal {
   public delAll(): Promise<undefined> {
     return this._memory.delAll();
   }
-
-  private _isNode(_test_workForBrowser: boolean): boolean {
-    if (_test_workForBrowser) return false;
-    return typeof process === 'object' && typeof process.versions === 'object';
-  }
-
 }
 

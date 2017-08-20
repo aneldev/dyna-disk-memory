@@ -72,10 +72,5 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
 
     return {full, base, folder, file};
   }
-
-  private _isNode():boolean {
-    return typeof process === 'object' && typeof process.versions === 'object';
-  }
-
 }
 

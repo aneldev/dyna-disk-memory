@@ -2,6 +2,7 @@ export interface ISettings {
     fragmentSize?: number;
     diskPath: string;
     _test_workForBrowser?: boolean;
+    _test_performDiskDelay?: number;
 }
 export interface IDynaDiskMemory {
     _test_performDiskDelay: number;

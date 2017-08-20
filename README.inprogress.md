@@ -121,8 +121,6 @@ The only error you can expect is on `get()` if the key doesn't exist.
 
 The code is very simple! If you dive into you will see that whole code is only 160 lines! 
 
-**No dependencies!**
-
 # The future
 
 There is no thoughts to extend this library. It is doing something very specific and it is doing this well. Other amazing libraries can be built using this, like: queue handlers, network buffers that they don't want to loose their data if they crashed. 

@@ -171,10 +171,5 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory{
       cb(err);
     });
   }
-
-  private _isNode():boolean {
-    return typeof process === 'object' && typeof process.versions === 'object';
-  }
-
 }
 

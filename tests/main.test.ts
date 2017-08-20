@@ -2,16 +2,16 @@
 declare let global: any, jasmine: any, describe: any, expect: any, it: any;
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
 
+import {isNode} from 'dyna-universal';
 import {DynaDiskMemory} from './../src';
 import {forTimes} from 'dyna-loops'
 import {randomTextBig, randomTextSmall} from './utils/randomText';
-
 
 const createTest = (forNode: boolean) => {
   // localStorage polyfill
   if (!forNode && (typeof global.LocalStorage === "undefined" || global.LocalStorage === null)) {
     const LocalStorage = require('node-localstorage').LocalStorage;
-    global.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit
+    global.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
   }
   let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
 
@@ -260,7 +260,13 @@ const createTest = (forNode: boolean) => {
     });
   });
 
-}
+};
 
-createTest(true);
+// RUN test tests
+
+// if the test runs under node, then test the DynaDiskMemoryForNode
+if (isNode()) createTest(true);
+
+// regardless the environment, test the DynaDiskMemoryForBrowser
+// (in case of node.js the localStorage polyfill will be applied)
 createTest(false);

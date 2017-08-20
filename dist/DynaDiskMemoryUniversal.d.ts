@@ -9,5 +9,4 @@ export declare class DynaDiskMemoryUniversal {
     del(container: string, key: string): Promise<any>;
     delContainer(container: string): Promise<undefined>;
     delAll(): Promise<undefined>;
-    private _isNode(_test_workForBrowser);
 }

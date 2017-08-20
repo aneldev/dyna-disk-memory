@@ -1,7 +1,8 @@
 export interface ISettings {
   fragmentSize?: number;
   diskPath: string;
-  _test_workForBrowser?: boolean;
+  _test_workForBrowser?: boolean;   // force it to work as in browser (for tests under nodejs)
+  _test_performDiskDelay?: number;
 }
 
 export interface IDynaDiskMemory {

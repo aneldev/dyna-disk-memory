@@ -29,7 +29,9 @@ const config = {
     loaders: loaders
   },
   node: {
-    fs: "empty"
+    fs: "empty",
+    path: "empty",
+    child_process: "empty",
   }
 };
 
