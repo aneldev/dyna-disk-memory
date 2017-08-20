@@ -47,10 +47,12 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
   public delContainer(container: string): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const names: IFolderFile = this._generateFilename(container);
-      Object.keys(localStorage)
-        .filter((key: string) => key.startsWith(names.folder + '/'))
-        .forEach((key: string) => localStorage.removeItem(key));
-      setTimeout(resolve, this._test_performDiskDelay);
+      const keysToDel: string [] = Object.keys(localStorage)
+        .filter((key: string) => key.startsWith(names.folder + '/'));
+      keysToDel.forEach((key: string) => localStorage.removeItem(key));
+      setTimeout(() => {
+        if (keysToDel.length) resolve(); else reject({errorMessage: 'Nothing to del'});
+      }, this._test_performDiskDelay);
     });
   }
 

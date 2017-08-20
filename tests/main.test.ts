@@ -233,10 +233,10 @@ const createTest = (forNode: boolean) => {
         })
     });
 
-    it('should node delete non existed containers', (done: Function) => {
+    it('should not delete non existed containers', (done: Function) => {
       ddm.delContainer('books')
         .then(() => {
-          expect(true).toBe(false);
+          expect(true).toBe(false);  // wrong case
           done();
         })
         .catch((error: any) => {
