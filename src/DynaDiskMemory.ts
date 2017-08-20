@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const rmdir = require('rimraf');
+const exec = require('child_process').exec;
 
 export interface ISettings {
   fragmentSize?: number;
@@ -53,7 +53,7 @@ export class DynaDiskMemory {
 
   public delContainer(container: string): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      rmdir(`${this._settings.diskPath}${container}`, (error: any) => {
+      this._rmdir(`${this._settings.diskPath}${container}`, (error: any) => {
         error && reject(error) || resolve();
       });
     });
@@ -61,7 +61,7 @@ export class DynaDiskMemory {
 
   public delAll(): Promise<undefined> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      rmdir(this._settings.diskPath, (error: any) => {
+      this._rmdir(this._settings.diskPath, (error: any) => {
         error && reject(error) || resolve();
       });
     });
@@ -168,5 +168,16 @@ export class DynaDiskMemory {
     if (output[output.length - 1] == separetor) output += '_fc';
     return output;
   }
+
+  private _rmdir(file, cb: (error: any)=> void):void{
+    exec('rm -rf ' + file, function (err: any, stdout: any, stderr:any) {
+      cb(err);
+    });
+  }
+
+  private _isNode():boolean {
+    return typeof process === 'object' && typeof process.versions === 'object';
+  }
+
 }
 
