@@ -11,7 +11,7 @@ export class DynaDiskMemoryUniversal {
     };
     if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
 
-    if (this._isNode())
+    if (this._isNode(!!this._settings._test_workForBrowser))
       this._memory = new DynaDiskMemoryForNode(this._settings);
     else
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
@@ -42,7 +42,8 @@ export class DynaDiskMemoryUniversal {
     return this._memory.delAll();
   }
 
-  private _isNode(): boolean {
+  private _isNode(_test_workForBrowser: boolean): boolean {
+    if (_test_workForBrowser) return false;
     return typeof process === 'object' && typeof process.versions === 'object';
   }
 

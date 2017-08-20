@@ -1,6 +1,7 @@
 export interface ISettings {
   fragmentSize?: number;
   diskPath: string;
+  _test_workForBrowser?: boolean;
 }
 
 export interface IDynaDiskMemory {
@@ -14,5 +15,5 @@ export interface IDynaDiskMemory {
 
   delContainer(container: string): Promise<undefined>;
 
-  delAll(): Promise<undefined>
+  delAll(): Promise<undefined>;
 }
