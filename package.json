@@ -29,7 +29,7 @@
     ".build-index.d.ts-clear": "cd dist/ && find . -name \\*.js -delete && cd ..",
     ".build-dist": "set NODE_ENV=production && webpack --config webpack.dist.config.js",
     "test": "npm run dist && jest --coverage --no-cache",
-    "test-only": "jest --coverage --verbose --no-cache",
+    "test-only": "jest  --verbose --coverage --no-cache",
     "publish-push": "npm version patch && npm publish && git push",
     "tpp": "npm run test-publish-push",
     "test-publish-push": "npm test && npm version patch && npm publish && git push",

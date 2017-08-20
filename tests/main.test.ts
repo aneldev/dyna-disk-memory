@@ -1,6 +1,6 @@
 // help: https://facebook.github.io/jest/docs/expect.html
 declare let jasmine: any, describe: any, expect: any, it: any;
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 
 import {isNode, env} from 'dyna-universal';
 import {DynaDiskMemory} from './../src';
@@ -233,14 +233,14 @@ const createTest = (forNode: boolean) => {
         })
     });
 
-    it('should not delete non existed containers', (done: Function) => {
+    it('should not raise error deleting non existed containers', (done: Function) => {
       ddm.delContainer('books')
         .then(() => {
-          expect(true).toBe(false);  // wrong case
+          expect(true).toBe(true);  // wrong case
           done();
         })
         .catch((error: any) => {
-          expect(error).not.toBe(null);
+          expect(error).toBe(null);
           done();
         });
     });
