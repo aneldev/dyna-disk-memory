@@ -23,7 +23,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   private _settings: ISettings;
   public _test_performDiskDelay: number = 0;
 
-  public set(container: string, key: string, data: any): Promise<undefined> {
+  public set(container: string, key: string, data: any): Promise<void> {
     return this._saveFile(container, key, data);
   }
 
@@ -31,7 +31,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     return this._loadFile(container, key);
   }
 
-  public del(container: string, key: string): Promise<undefined> {
+  public del(container: string, key: string): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const fileName: string = this._generateFilename(container, key).full;
 
@@ -48,7 +48,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  public delContainer(container: string): Promise<undefined> {
+  public delContainer(container: string): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       this._rmdir(`${this._settings.diskPath}${container}`, (error: any) => {
         error && reject(error) || resolve();
@@ -56,7 +56,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  public delAll(): Promise<undefined> {
+  public delAll(): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       this._rmdir(this._settings.diskPath, (error: any) => {
         error && reject(error) || resolve();
@@ -64,7 +64,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  private _saveFile(container: string, key: string, data: any): Promise<undefined> {
+  private _saveFile(container: string, key: string, data: any): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       let fileNames: IFolderFile = this._generateFilename(container, key);
 
@@ -88,7 +88,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  private _createDirectory(directory: string): Promise<undefined> {
+  private _createDirectory(directory: string): Promise<void> {
     // todo: make this async
     return new Promise((resolve: Function, reject: Function) => {
       try {
@@ -106,7 +106,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  private _writeFileOnDisk(folder: string, fileName: string, data: any): Promise<undefined> {
+  private _writeFileOnDisk(folder: string, fileName: string, data: any): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const fullPath: string = `${folder}/${fileName}`;
       setTimeout(() => {

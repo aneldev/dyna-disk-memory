@@ -28,7 +28,7 @@ export class DynaDiskMemoryUniversal {
   private _settings: ISettings;
   private _memory: IDynaDiskMemory;
 
-  public set(container: string, key: string, data: any): Promise<undefined> {
+  public set(container: string, key: string, data: any): Promise<void> {
     return this._memory.set(container, key, data);
   }
 
@@ -40,11 +40,11 @@ export class DynaDiskMemoryUniversal {
     return this._memory.del(container, key);
   }
 
-  public delContainer(container: string): Promise<undefined> {
+  public delContainer(container: string): Promise<void> {
     return this._memory.delContainer(container);
   }
 
-  public delAll(): Promise<undefined> {
+  public delAll(): Promise<void> {
     return this._memory.delAll();
   }
 }

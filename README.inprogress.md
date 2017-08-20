@@ -75,7 +75,7 @@ The path where will be created and used to save the data. Can be relative or roo
 
 This is optional, the default value is 13. Is the size of the fragments to break the folder names. No need to touch it.
 
-## set(container: string, key: string, data: any): Promise<undefined>
+## set(container: string, key: string, data: any): Promise<void>
 
 Writes or overwrites the `data` into a `container` for this `key`.
 
@@ -97,13 +97,13 @@ Deletes a `key` from this container.
 
 Returns a Promise, `resolve: Function` on completion of delete and `reject: (error:any) => void` on disk error.
 
-## delContainer(container: string): Promise<undefined>
+## delContainer(container: string): Promise<void>
 
 Deletes a `container`, that means all the `keys` and `data` will be gone permantelly.
 
 Returns a Promise, `resolve: Function` when the deletion completed and `reject: (error:any) => void` on disk error.
 
-## delAll(): Promise<undefined>
+## delAll(): Promise<void>
 
 Deletes everything, delete the `diskPath` defined on constructor.
 

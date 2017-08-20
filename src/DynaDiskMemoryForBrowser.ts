@@ -20,7 +20,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
   private _settings: ISettings;
   public _test_performDiskDelay: number = 0;
 
-  public set(container: string, key: string, data: any): Promise<undefined> {
+  public set(container: string, key: string, data: any): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const names: IFolderFile = this._generateFilename(container, key);
       localStorage.setItem(names.full, JSON.stringify(data));
@@ -36,7 +36,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     });
   }
 
-  public del(container: string, key: string): Promise<undefined> {
+  public del(container: string, key: string): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const names: IFolderFile = this._generateFilename(container, key);
       localStorage.removeItem(names.full);
@@ -44,7 +44,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     });
   }
 
-  public delContainer(container: string): Promise<undefined> {
+  public delContainer(container: string): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const names: IFolderFile = this._generateFilename(container);
       Object.keys(localStorage)
@@ -54,7 +54,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     });
   }
 
-  public delAll(): Promise<undefined> {
+  public delAll(): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       const names: IFolderFile = this._generateFilename();
       Object.keys(localStorage)
