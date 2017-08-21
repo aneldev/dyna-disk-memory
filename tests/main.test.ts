@@ -1,13 +1,13 @@
 // help: https://facebook.github.io/jest/docs/expect.html
 declare let jasmine: any, describe: any, expect: any, it: any;
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
+if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
 import {isNode, env} from 'dyna-universal';
 import {DynaDiskMemory} from './../src';
 import {forTimes} from 'dyna-loops'
-import {randomTextBig, randomTextSmall} from './utils/randomText';
+import {randomTextBig, randomTextSmall} from './randomText';
 
-const STRESS_MODE: Boolean = true; // default for this test: true
+const STRESS_MODE: Boolean = false; // default for this test: true
 
 const TEST_ITEMS_AMOUNT: number = STRESS_MODE ? 100 : 5;
 const PERFORM_DISK_DELAY: number = STRESS_MODE ? 100 : 2;
@@ -52,6 +52,20 @@ const createTest = (forNode: boolean) => {
           expect(data.pages).toBe(2000);
           expect(data.price).toBe(23.23);
           expect(data.isbn).toBe('02760245N4353');
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        });
+    });
+
+    // get test
+
+    it('should get undefined for unknown keys', (done: Function) => {
+      ddm.get('books', '#key-that-does-no-exist')
+        .then((data: any) => {
+          expect(data).toBe(undefined);
           done();
         })
         .catch((error: any) => {
@@ -162,7 +176,7 @@ const createTest = (forNode: boolean) => {
     it('should not get the deleted key', (done: Function) => {
       ddm.get('books', '#39922323')
         .then((data) => {
-          expect(data).toBe(null);
+          expect(data).toBe(undefined);
           done();
         })
         .catch((error: any) => {
@@ -188,7 +202,6 @@ const createTest = (forNode: boolean) => {
           });
       });
     });
-
 
     // test small to large keys
 

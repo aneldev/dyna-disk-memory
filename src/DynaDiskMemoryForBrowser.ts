@@ -22,17 +22,27 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
 
   public set(container: string, key: string, data: any): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      const names: IFolderFile = this._generateFilename(container, key);
-      localStorage.setItem(names.full, JSON.stringify(data));
-      setTimeout(resolve, this._test_performDiskDelay);
+      try {
+        const names: IFolderFile = this._generateFilename(container, key);
+        localStorage.setItem(names.full, JSON.stringify(data));
+        setTimeout(resolve, this._test_performDiskDelay);
+      } catch (err) {
+        setTimeout(reject, this._test_performDiskDelay, err);
+      }
     });
   }
 
   public get(container: string, key: string): Promise<any> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
-      const names: IFolderFile = this._generateFilename(container, key);
-      const data: any = JSON.parse(localStorage.getItem(names.full));
-      setTimeout(resolve, this._test_performDiskDelay, data);
+      try {
+        const names: IFolderFile = this._generateFilename(container, key);
+        const rawData: any = localStorage.getItem(names.full);
+        let data: any = undefined;
+        if (typeof rawData == 'string') data = JSON.parse(rawData);
+        setTimeout(resolve, this._test_performDiskDelay, data);
+      } catch (err) {
+        setTimeout(reject, this._test_performDiskDelay, err);
+      }
     });
   }
 

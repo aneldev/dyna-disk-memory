@@ -110,9 +110,14 @@ class DynaDiskMemoryForBrowser {
     }
     get(container, key) {
         return new Promise((resolve, reject) => {
-            const names = this._generateFilename(container, key);
-            const data = JSON.parse(localStorage.getItem(names.full));
-            setTimeout(resolve, this._test_performDiskDelay, data);
+            try {
+                const names = this._generateFilename(container, key);
+                const data = JSON.parse(localStorage.getItem(names.full));
+                setTimeout(resolve, this._test_performDiskDelay, data);
+            }
+            catch (err) {
+                reject(err);
+            }
         });
     }
     del(container, key) {
