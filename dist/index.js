@@ -103,20 +103,28 @@ class DynaDiskMemoryForBrowser {
     }
     set(container, key, data) {
         return new Promise((resolve, reject) => {
-            const names = this._generateFilename(container, key);
-            localStorage.setItem(names.full, JSON.stringify(data));
-            setTimeout(resolve, this._test_performDiskDelay);
+            try {
+                const names = this._generateFilename(container, key);
+                localStorage.setItem(names.full, JSON.stringify(data));
+                setTimeout(resolve, this._test_performDiskDelay);
+            }
+            catch (err) {
+                setTimeout(reject, this._test_performDiskDelay, err);
+            }
         });
     }
     get(container, key) {
         return new Promise((resolve, reject) => {
             try {
                 const names = this._generateFilename(container, key);
-                const data = JSON.parse(localStorage.getItem(names.full));
+                const rawData = localStorage.getItem(names.full);
+                let data = undefined;
+                if (typeof rawData == 'string')
+                    data = JSON.parse(rawData);
                 setTimeout(resolve, this._test_performDiskDelay, data);
             }
             catch (err) {
-                reject(err);
+                setTimeout(reject, this._test_performDiskDelay, err);
             }
         });
     }
@@ -308,6 +316,7 @@ class DynaDiskMemoryForNode {
         return output;
     }
     _rmdir(file, cb) {
+        console.log('debug! deleting file', file);
         exec('rm -rf ' + file, function (err, stdout, stderr) {
             cb(err);
         });

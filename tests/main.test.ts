@@ -309,19 +309,6 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    // clean up
-
-    it('should clean up', (done: Function) => {
-      ddm.delAll()
-        .then(() => {
-          expect(true).toBe(true);
-          done();
-        })
-        .catch((error: any) => {
-          expect(error).toBe(null);
-          done();
-        });
-    });
   });
 
 };
