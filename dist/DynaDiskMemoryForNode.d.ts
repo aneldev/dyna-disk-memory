@@ -3,8 +3,8 @@ export declare class DynaDiskMemoryForNode implements IDynaDiskMemory {
     constructor(settings: ISettings);
     private _settings;
     _test_performDiskDelay: number;
-    set<T>(container: string, key: string, data: T): Promise<void>;
-    get<T>(container: string, key: string): Promise<T>;
+    set<TData>(container: string, key: string, data: TData): Promise<void>;
+    get<TData>(container: string, key: string): Promise<TData>;
     del(container: string, key: string): Promise<void>;
     delContainer(container: string): Promise<void>;
     delAll(): Promise<void>;

@@ -20,7 +20,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
   private _settings: ISettings;
   public _test_performDiskDelay: number = 0;
 
-  public set<T>(container: string, key: string, data: T): Promise<void> {
+  public set<TData>(container: string, key: string, data: TData): Promise<void> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       try {
         const names: IFolderFile = this._generateFilename(container, key);
@@ -32,7 +32,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     });
   }
 
-  public get<T>(container: string, key: string): Promise<T> {
+  public get<TData>(container: string, key: string): Promise<TData> {
     return new Promise((resolve: Function, reject: (error: any) => void) => {
       try {
         const names: IFolderFile = this._generateFilename(container, key);

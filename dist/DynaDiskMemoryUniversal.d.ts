@@ -4,8 +4,8 @@ export declare class DynaDiskMemoryUniversal {
     _test_performDiskDelay: number;
     private _settings;
     private _memory;
-    set<T>(container: string, key: string, data: T): Promise<void>;
-    get<T>(container: string, key: string): Promise<T>;
+    set<TData>(container: string, key: string, data: TData): Promise<void>;
+    get<TData>(container: string, key: string): Promise<TData>;
     del(container: string, key: string): Promise<any>;
     delContainer(container: string): Promise<void>;
     delAll(): Promise<void>;
