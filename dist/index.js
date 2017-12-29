@@ -347,7 +347,6 @@ var DynaDiskMemoryForNode = (function () {
         return output;
     };
     DynaDiskMemoryForNode.prototype._rmdir = function (file, cb) {
-        console.log('debug! deleting file', file);
         exec('rm -rf ' + file, function (err, stdout, stderr) {
             cb(err);
         });

@@ -171,7 +171,6 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   }
 
   private _rmdir(file, cb: (error: any) => void): void {
-    console.log('debug! deleting file', file)
     exec('rm -rf ' + file, function (err: any, stdout: any, stderr: any) {
       cb(err);
     });
