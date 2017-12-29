@@ -1,4 +1,6 @@
 // help: https://facebook.github.io/jest/docs/expect.html
+import {mkdir} from "dyna-node-fs";
+
 declare let jasmine: any, describe: any, expect: any, it: any;
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
@@ -16,6 +18,7 @@ const createTest = (forNode: boolean) => {
   // localStorage polyfill
   if (!forNode && (typeof env.localStorage === "undefined" || env.localStorage === null)) {
     const LocalStorage = require('node-localstorage').LocalStorage;
+    mkdir('./temp/localStoragePolyfill');
     env.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
   }
   let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
