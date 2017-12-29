@@ -83,7 +83,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const DynaDiskMemoryUniversal_1 = __webpack_require__(3);
+var DynaDiskMemoryUniversal_1 = __webpack_require__(3);
 exports.DynaDiskMemory = DynaDiskMemoryUniversal_1.DynaDiskMemoryUniversal;
 
 
@@ -93,74 +93,90 @@ exports.DynaDiskMemory = DynaDiskMemoryUniversal_1.DynaDiskMemoryUniversal;
 
 "use strict";
 
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-class DynaDiskMemoryForBrowser {
-    constructor(settings) {
+var DynaDiskMemoryForBrowser = (function () {
+    function DynaDiskMemoryForBrowser(settings) {
         this._test_performDiskDelay = 0;
-        this._settings = Object.assign({ fragmentSize: 13 }, settings);
+        this._settings = __assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
     }
-    set(container, key, data) {
-        return new Promise((resolve, reject) => {
+    DynaDiskMemoryForBrowser.prototype.set = function (container, key, data) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             try {
-                const names = this._generateFilename(container, key);
+                var names = _this._generateFilename(container, key);
                 localStorage.setItem(names.full, JSON.stringify(data));
-                setTimeout(resolve, this._test_performDiskDelay);
+                setTimeout(resolve, _this._test_performDiskDelay);
             }
             catch (err) {
-                setTimeout(reject, this._test_performDiskDelay, err);
+                setTimeout(reject, _this._test_performDiskDelay, err);
             }
         });
-    }
-    get(container, key) {
-        return new Promise((resolve, reject) => {
+    };
+    DynaDiskMemoryForBrowser.prototype.get = function (container, key) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
             try {
-                const names = this._generateFilename(container, key);
-                const rawData = localStorage.getItem(names.full);
-                let data = undefined;
+                var names = _this._generateFilename(container, key);
+                var rawData = localStorage.getItem(names.full);
+                var data = undefined;
                 if (typeof rawData == 'string')
                     data = JSON.parse(rawData);
-                setTimeout(resolve, this._test_performDiskDelay, data);
+                setTimeout(resolve, _this._test_performDiskDelay, data);
             }
             catch (err) {
-                setTimeout(reject, this._test_performDiskDelay, err);
+                setTimeout(reject, _this._test_performDiskDelay, err);
             }
         });
-    }
-    del(container, key) {
-        return new Promise((resolve, reject) => {
-            const names = this._generateFilename(container, key);
+    };
+    DynaDiskMemoryForBrowser.prototype.del = function (container, key) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var names = _this._generateFilename(container, key);
             localStorage.removeItem(names.full);
-            setTimeout(resolve, this._test_performDiskDelay);
+            setTimeout(resolve, _this._test_performDiskDelay);
         });
-    }
-    delContainer(container) {
-        return new Promise((resolve, reject) => {
-            const names = this._generateFilename(container);
+    };
+    DynaDiskMemoryForBrowser.prototype.delContainer = function (container) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var names = _this._generateFilename(container);
             Object.keys(localStorage)
-                .filter((key) => key.startsWith(names.folder + '/'))
-                .forEach((key) => localStorage.removeItem(key));
-            setTimeout(resolve, this._test_performDiskDelay);
+                .filter(function (key) { return key.startsWith(names.folder + '/'); })
+                .forEach(function (key) { return localStorage.removeItem(key); });
+            setTimeout(resolve, _this._test_performDiskDelay);
         });
-    }
-    delAll() {
-        return new Promise((resolve, reject) => {
-            const names = this._generateFilename();
+    };
+    DynaDiskMemoryForBrowser.prototype.delAll = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var names = _this._generateFilename();
             Object.keys(localStorage)
-                .filter((key) => key.startsWith(names.base + '/'))
-                .forEach((key) => localStorage.removeItem(key));
-            setTimeout(resolve, this._test_performDiskDelay);
+                .filter(function (key) { return key.startsWith(names.base + '/'); })
+                .forEach(function (key) { return localStorage.removeItem(key); });
+            setTimeout(resolve, _this._test_performDiskDelay);
         });
-    }
-    _generateFilename(container = '---', key = '---') {
-        const full = `dyna-disk-memory/${this._settings.diskPath}${container}/${key}`;
-        const base = full.substr(0, full.indexOf('/'));
-        const folder = full.substr(0, full.lastIndexOf('/'));
-        const file = full.substr(full.lastIndexOf('/') + 1);
-        return { full, base, folder, file };
-    }
-}
+    };
+    DynaDiskMemoryForBrowser.prototype._generateFilename = function (container, key) {
+        if (container === void 0) { container = '---'; }
+        if (key === void 0) { key = '---'; }
+        var full = "dyna-disk-memory/" + this._settings.diskPath + container + "/" + key;
+        var base = full.substr(0, full.indexOf('/'));
+        var folder = full.substr(0, full.lastIndexOf('/'));
+        var file = full.substr(full.lastIndexOf('/') + 1);
+        return { full: full, base: base, folder: folder, file: file };
+    };
+    return DynaDiskMemoryForBrowser;
+}());
 exports.DynaDiskMemoryForBrowser = DynaDiskMemoryForBrowser;
 
 
@@ -170,26 +186,35 @@ exports.DynaDiskMemoryForBrowser = DynaDiskMemoryForBrowser;
 
 "use strict";
 
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs = __webpack_require__(6);
-const path = __webpack_require__(7);
-const exec = __webpack_require__(4).exec;
-class DynaDiskMemoryForNode {
-    constructor(settings) {
+var fs = __webpack_require__(6);
+var path = __webpack_require__(7);
+var exec = __webpack_require__(4).exec;
+var DynaDiskMemoryForNode = (function () {
+    function DynaDiskMemoryForNode(settings) {
         this._test_performDiskDelay = 0;
-        this._settings = Object.assign({ fragmentSize: 13 }, settings);
+        this._settings = __assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
     }
-    set(container, key, data) {
+    DynaDiskMemoryForNode.prototype.set = function (container, key, data) {
         return this._saveFile(container, key, data);
-    }
-    get(container, key) {
+    };
+    DynaDiskMemoryForNode.prototype.get = function (container, key) {
         return this._loadFile(container, key);
-    }
-    del(container, key) {
-        return new Promise((resolve, reject) => {
-            const fileName = this._generateFilename(container, key).full;
+    };
+    DynaDiskMemoryForNode.prototype.del = function (container, key) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var fileName = _this._generateFilename(container, key).full;
             fs.exists(fileName, function (exists) {
                 if (exists) {
                     fs.unlink(fileName, function (err) {
@@ -197,53 +222,57 @@ class DynaDiskMemoryForNode {
                     });
                 }
                 else {
-                    reject({ errorMessage: `DynaDiskMemory: del: cannot find to del file for container [${container}] and key [${key}]`, fileName });
+                    reject({ errorMessage: "DynaDiskMemory: del: cannot find to del file for container [" + container + "] and key [" + key + "]", fileName: fileName });
                 }
             });
         });
-    }
-    delContainer(container) {
-        return new Promise((resolve, reject) => {
-            this._rmdir(`${this._settings.diskPath}${container}`, (error) => {
+    };
+    DynaDiskMemoryForNode.prototype.delContainer = function (container) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this._rmdir("" + _this._settings.diskPath + container, function (error) {
                 error && reject(error) || resolve();
             });
         });
-    }
-    delAll() {
-        return new Promise((resolve, reject) => {
-            this._rmdir(this._settings.diskPath, (error) => {
+    };
+    DynaDiskMemoryForNode.prototype.delAll = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            _this._rmdir(_this._settings.diskPath, function (error) {
                 error && reject(error) || resolve();
             });
         });
-    }
-    _saveFile(container, key, data) {
-        return new Promise((resolve, reject) => {
-            let fileNames = this._generateFilename(container, key);
-            this._createDirectory(fileNames.folder)
-                .then(() => {
-                this._writeFileOnDisk(fileNames.folder, fileNames.file, data)
-                    .then(() => resolve())
+    };
+    DynaDiskMemoryForNode.prototype._saveFile = function (container, key, data) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var fileNames = _this._generateFilename(container, key);
+            _this._createDirectory(fileNames.folder)
+                .then(function () {
+                _this._writeFileOnDisk(fileNames.folder, fileNames.file, data)
+                    .then(function () { return resolve(); })
                     .catch(reject);
             })
                 .catch(reject);
         });
-    }
-    _loadFile(container, key) {
-        return new Promise((resolve, reject) => {
-            let fileNames = this._generateFilename(container, key);
-            this._readFileFromDisk(fileNames.folder, fileNames.file)
-                .then((data) => resolve(data))
-                .catch((error) => resolve(undefined));
+    };
+    DynaDiskMemoryForNode.prototype._loadFile = function (container, key) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var fileNames = _this._generateFilename(container, key);
+            _this._readFileFromDisk(fileNames.folder, fileNames.file)
+                .then(function (data) { return resolve(data); })
+                .catch(function (error) { return resolve(undefined); });
         });
-    }
-    _createDirectory(directory) {
+    };
+    DynaDiskMemoryForNode.prototype._createDirectory = function (directory) {
         // todo: make this async
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve, reject) {
             try {
-                const sep = '/'; //path.sep;
-                const initDir = path.isAbsolute(directory) ? sep : '';
-                directory.split(sep).reduce((parentDir, childDir) => {
-                    const curDir = path.resolve(parentDir, childDir);
+                var sep = '/'; //path.sep;
+                var initDir = path.isAbsolute(directory) ? sep : '';
+                directory.split(sep).reduce(function (parentDir, childDir) {
+                    var curDir = path.resolve(parentDir, childDir);
                     if (!fs.existsSync(curDir))
                         fs.mkdirSync(curDir);
                     return curDir;
@@ -254,74 +283,77 @@ class DynaDiskMemoryForNode {
                 reject(err);
             }
         });
-    }
-    _writeFileOnDisk(folder, fileName, data) {
-        return new Promise((resolve, reject) => {
-            const fullPath = `${folder}/${fileName}`;
-            setTimeout(() => {
-                fs.exists(fullPath, (exists) => {
+    };
+    DynaDiskMemoryForNode.prototype._writeFileOnDisk = function (folder, fileName, data) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var fullPath = folder + "/" + fileName;
+            setTimeout(function () {
+                fs.exists(fullPath, function (exists) {
                     if (exists)
                         fs.unlinkSync(fullPath);
-                    fs.writeFile(`${fullPath}`, JSON.stringify(data), (err) => {
+                    fs.writeFile("" + fullPath, JSON.stringify(data), function (err) {
                         if (err)
-                            reject({ errorMessage: `Cannot write file [${fullPath}]`, error: err });
+                            reject({ errorMessage: "Cannot write file [" + fullPath + "]", error: err });
                         else
                             resolve();
                     });
                 });
-            }, this._test_performDiskDelay);
+            }, _this._test_performDiskDelay);
         });
-    }
-    _readFileFromDisk(folder, fileName) {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                const fullFileName = `${folder}/${fileName}`;
+    };
+    DynaDiskMemoryForNode.prototype._readFileFromDisk = function (folder, fileName) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            setTimeout(function () {
+                var fullFileName = folder + "/" + fileName;
                 fs.exists(fullFileName, function (exists) {
                     if (exists) {
-                        fs.readFile(fullFileName, 'utf8', (err, data) => {
+                        fs.readFile(fullFileName, 'utf8', function (err, data) {
                             if (err)
-                                reject({ errorMessage: `Cannot read file [${fullFileName}]`, error: err });
+                                reject({ errorMessage: "Cannot read file [" + fullFileName + "]", error: err });
                             else
                                 resolve(JSON.parse(data));
                         });
                     }
                     else {
-                        reject({ errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName });
+                        reject({ errorMessage: "DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [" + folder + "] and fileName [" + fileName + "]", fullFileName: fullFileName });
                     }
                 });
-            }, this._test_performDiskDelay);
+            }, _this._test_performDiskDelay);
         });
-    }
-    _generateFilename(container, key) {
-        const generatedContainer = this._getAsciiCodeHash(container);
-        const generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
-        const full = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
-        const folder = full.substr(0, full.lastIndexOf('/'));
-        const file = full.substr(full.lastIndexOf('/') + 1);
-        return { full, folder, file };
-    }
-    _getAsciiCodeHash(key) {
+    };
+    DynaDiskMemoryForNode.prototype._generateFilename = function (container, key) {
+        var generatedContainer = this._getAsciiCodeHash(container);
+        var generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
+        var full = "" + this._settings.diskPath + generatedContainer + "/" + generatedKey;
+        var folder = full.substr(0, full.lastIndexOf('/'));
+        var file = full.substr(full.lastIndexOf('/') + 1);
+        return { full: full, folder: folder, file: file };
+    };
+    DynaDiskMemoryForNode.prototype._getAsciiCodeHash = function (key) {
         return key
             .split('')
-            .map((c) => c.charCodeAt(0))
+            .map(function (c) { return c.charCodeAt(0); })
             .join('_');
-    }
-    _splitText(text, step, separetor) {
-        let output = "";
-        let se = text.split('').reverse();
+    };
+    DynaDiskMemoryForNode.prototype._splitText = function (text, step, separetor) {
+        var output = "";
+        var se = text.split('').reverse();
         while (se.length)
             output += se.splice(0, step).join('') + separetor;
         if (output[output.length - 1] == separetor)
             output += '_fc';
         return output;
-    }
-    _rmdir(file, cb) {
+    };
+    DynaDiskMemoryForNode.prototype._rmdir = function (file, cb) {
         console.log('debug! deleting file', file);
         exec('rm -rf ' + file, function (err, stdout, stderr) {
             cb(err);
         });
-    }
-}
+    };
+    return DynaDiskMemoryForNode;
+}());
 exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 
 
@@ -331,14 +363,22 @@ exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
 
 "use strict";
 
+var __assign = (this && this.__assign) || Object.assign || function(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+            t[p] = s[p];
+    }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dyna_universal_1 = __webpack_require__(5);
-const DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
-const DynaDiskMemoryForNode_1 = __webpack_require__(2);
-class DynaDiskMemoryUniversal {
-    constructor(settings) {
+var dyna_universal_1 = __webpack_require__(5);
+var DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
+var DynaDiskMemoryForNode_1 = __webpack_require__(2);
+var DynaDiskMemoryUniversal = (function () {
+    function DynaDiskMemoryUniversal(settings) {
         this._test_performDiskDelay = 0;
-        this._settings = Object.assign({ fragmentSize: 13, _test_workForBrowser: false, _test_performDiskDelay: 0 }, settings);
+        this._settings = __assign({ fragmentSize: 13, _test_workForBrowser: false, _test_performDiskDelay: 0 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
         if (this._settings._test_workForBrowser)
@@ -349,22 +389,23 @@ class DynaDiskMemoryUniversal {
             this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
         this._memory._test_performDiskDelay = this._test_performDiskDelay;
     }
-    set(container, key, data) {
+    DynaDiskMemoryUniversal.prototype.set = function (container, key, data) {
         return this._memory.set(container, key, data);
-    }
-    get(container, key) {
+    };
+    DynaDiskMemoryUniversal.prototype.get = function (container, key) {
         return this._memory.get(container, key);
-    }
-    del(container, key) {
+    };
+    DynaDiskMemoryUniversal.prototype.del = function (container, key) {
         return this._memory.del(container, key);
-    }
-    delContainer(container) {
+    };
+    DynaDiskMemoryUniversal.prototype.delContainer = function (container) {
         return this._memory.delContainer(container);
-    }
-    delAll() {
+    };
+    DynaDiskMemoryUniversal.prototype.delAll = function () {
         return this._memory.delAll();
-    }
-}
+    };
+    return DynaDiskMemoryUniversal;
+}());
 exports.DynaDiskMemoryUniversal = DynaDiskMemoryUniversal;
 
 

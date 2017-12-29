@@ -3,9 +3,9 @@ declare let jasmine: any, describe: any, expect: any, it: any;
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
 import {isNode, env} from 'dyna-universal';
-import {DynaDiskMemory} from './../src';
+import {DynaDiskMemory} from '../../src';
 import {forTimes} from 'dyna-loops'
-import {randomTextBig, randomTextSmall} from './randomText';
+import {randomTextBig, randomTextSmall} from '../utils/randomText';
 
 const STRESS_MODE: Boolean = false; // default for this test: true
 
@@ -147,7 +147,7 @@ const createTest = (forNode: boolean) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         ddm.get('books', `${i}-superdooperkey`)
-          .then((data) => {
+          .then((data: any) => {
             expect(data.title).toBe(`Test book with key ${i}`);
             expect(data.pages).toBe(i * 23);
             expect(data.price).toBe(i * 0.87);
@@ -189,7 +189,7 @@ const createTest = (forNode: boolean) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         ddm.get('books', `${i}-superdooperkey`)
-          .then((data) => {
+          .then((data: any) => {
             expect(data.title).toBe(`Test book with key ${i}`);
             expect(data.pages).toBe(i * 23);
             expect(data.price).toBe(i * 0.87);
@@ -231,7 +231,7 @@ const createTest = (forNode: boolean) => {
         let key: string = '';
         forTimes(i + 1, () => key += '.');
         ddm.get('magazines', key)
-          .then((data) => {
+          .then((data: any) => {
             expect(data.title).toBe(`Magazine of ${i}${i * 13}`);
             expect(data.price).toBe(i * 0.87);
             expect(data.barcode).toBe(`9981155481${i}`);
@@ -270,7 +270,7 @@ const createTest = (forNode: boolean) => {
       randomText.forEach((text: string, i: number) => {
         const key: string = text;
         ddm.get('novels', key)
-          .then((data) => {
+          .then((data: any) => {
             expect(data.title).toBe(`Novel; ${key}`);
             expect(data.price).toBe(i * 3.87);
             expect(data.isbn).toBe(`XXX9981155481${i}${key}`);
