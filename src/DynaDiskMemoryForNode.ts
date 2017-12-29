@@ -23,11 +23,11 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   private _settings: ISettings;
   public _test_performDiskDelay: number = 0;
 
-  public set(container: string, key: string, data: any): Promise<void> {
+  public set<T>(container: string, key: string, data: T): Promise<void> {
     return this._saveFile(container, key, data);
   }
 
-  public get(container: string, key: string): Promise<any> {
+  public get<T>(container: string, key: string): Promise<T> {
     return this._loadFile(container, key);
   }
 

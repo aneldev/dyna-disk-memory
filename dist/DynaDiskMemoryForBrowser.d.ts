@@ -3,8 +3,8 @@ export declare class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     constructor(settings: ISettings);
     private _settings;
     _test_performDiskDelay: number;
-    set(container: string, key: string, data: any): Promise<void>;
-    get(container: string, key: string): Promise<any>;
+    set<T>(container: string, key: string, data: T): Promise<void>;
+    get<T>(container: string, key: string): Promise<T>;
     del(container: string, key: string): Promise<void>;
     delContainer(container: string): Promise<void>;
     delAll(): Promise<void>;

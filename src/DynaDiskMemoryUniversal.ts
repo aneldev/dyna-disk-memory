@@ -28,12 +28,12 @@ export class DynaDiskMemoryUniversal {
   private _settings: ISettings;
   private _memory: IDynaDiskMemory;
 
-  public set(container: string, key: string, data: any): Promise<void> {
-    return this._memory.set(container, key, data);
+  public set<T>(container: string, key: string, data: T): Promise<void> {
+    return this._memory.set<T>(container, key, data);
   }
 
-  public get(container: string, key: string): Promise<any> {
-    return this._memory.get(container, key);
+  public get<T>(container: string, key: string): Promise<T> {
+    return this._memory.get<T>(container, key);
   }
 
   public del(container: string, key: string): Promise<any> {

@@ -8,9 +8,9 @@ export interface ISettings {
 export interface IDynaDiskMemory {
   _test_performDiskDelay: number;
 
-  set(container: string, key: string, data: any): Promise<void>;
+  set<T>(container: string, key: string, data: T): Promise<void>;
 
-  get(container: string, key: string): Promise<any>;
+  get<T>(container: string, key: string): Promise<T>;
 
   del(container: string, key: string): Promise<void>;
 
