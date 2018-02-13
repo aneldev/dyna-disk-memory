@@ -102,7 +102,7 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var DynaDiskMemoryForBrowser = (function () {
+var DynaDiskMemoryForBrowser = /** @class */ (function () {
     function DynaDiskMemoryForBrowser(settings) {
         this._test_performDiskDelay = 0;
         this._settings = __assign({ fragmentSize: 13 }, settings);
@@ -198,7 +198,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = __webpack_require__(6);
 var path = __webpack_require__(7);
 var exec = __webpack_require__(4).exec;
-var DynaDiskMemoryForNode = (function () {
+var DynaDiskMemoryForNode = /** @class */ (function () {
     function DynaDiskMemoryForNode(settings) {
         this._test_performDiskDelay = 0;
         this._settings = __assign({ fragmentSize: 13 }, settings);
@@ -374,7 +374,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var dyna_universal_1 = __webpack_require__(5);
 var DynaDiskMemoryForBrowser_1 = __webpack_require__(1);
 var DynaDiskMemoryForNode_1 = __webpack_require__(2);
-var DynaDiskMemoryUniversal = (function () {
+var DynaDiskMemoryUniversal = /** @class */ (function () {
     function DynaDiskMemoryUniversal(settings) {
         this._test_performDiskDelay = 0;
         this._settings = __assign({ fragmentSize: 13, _test_workForBrowser: false, _test_performDiskDelay: 0 }, settings);
