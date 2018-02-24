@@ -131,13 +131,17 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
           if (exists) {
             fs.readFile(fullFileName, 'utf8', (err: any, data: any) => {
               if (err)
-                reject({errorMessage: `Cannot read file [${fullFileName}]`, error: err});
+                reject({code: 1802241812, errorMessage: `Cannot read file [${fullFileName}]`, error: err});
               else
-                resolve(JSON.parse(data));
+                try {
+                  resolve(JSON.parse(data));
+                } catch (error) {
+                  reject({code: 1802241811, errorMessage: `Cannot parse file [${fullFileName}]`, error: err});
+                }
             });
           }
           else {
-            reject({errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName});
+            reject({code: 1802241813, errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName});
           }
         });
       }, this._test_performDiskDelay);
