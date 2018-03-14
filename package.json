@@ -50,6 +50,7 @@
   "author": "Anel dev",
   "license": "MIT",
   "dependencies": {
+    "dyna-job-queue": "^1.0.25",
     "dyna-universal": "^0.2.4"
   },
   "devDependencies": {
