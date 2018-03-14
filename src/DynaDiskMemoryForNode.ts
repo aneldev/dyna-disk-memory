@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
+import {DynaJobQueue} from "dyna-job-queue";
 import {ISettings, IDynaDiskMemory} from './interfaces';
 
 interface IFolderFile {
@@ -21,18 +22,27 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   }
 
   private _settings: ISettings;
+  private _jogQueue = new DynaJobQueue();
   public _test_performDiskDelay: number = 0;
 
   public set<TData>(container: string, key: string, data: TData): Promise<void> {
-    return this._saveFile(container, key, data);
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
+      this._saveFile(container, key, data)
+        .then(() => resolve())
+        .catch(reject);
+    });
   }
 
   public get<TData>(container: string, key: string): Promise<TData> {
-    return this._loadFile(container, key);
+    return this._jogQueue.addJobPromise((resolve: (data:TData)=>void, reject: (error: any) => void) => {
+      this._loadFile(container, key)
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   public del(container: string, key: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
       const fileName: string = this._generateFilename(container, key).full;
 
       fs.exists(fileName, function (exists: boolean) {
@@ -49,7 +59,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   }
 
   public delContainer(container: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
       this._rmdir(`${this._settings.diskPath}${container}`, (error: any) => {
         error && reject(error) || resolve();
       });
@@ -57,7 +67,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   }
 
   public delAll(): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
       this._rmdir(this._settings.diskPath, (error: any) => {
         error && reject(error) || resolve();
       });
