@@ -1,7 +1,8 @@
-// help: https://facebook.github.io/jest/docs/expect.html
+import "jest";
 import {mkdir} from "dyna-node-fs";
 
-declare let jasmine: any, describe: any, expect: any, it: any;
+// help: https://facebook.github.io/jest/docs/expect.html
+
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
 import {isNode, env} from 'dyna-universal';
@@ -300,7 +301,31 @@ const createTest = (forNode: boolean) => {
         })
     });
 
-    it('should not raise error deleting non existed containers', (done: Function) => {
+    it('should delete the novels container', (done: Function) => {
+      ddm.delContainer('magazines')
+        .then(() => {
+          expect(true).toBe(true);
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        })
+    });
+
+    it('should delete the novels container', (done: Function) => {
+      ddm.delContainer('novels')
+        .then(() => {
+          expect(true).toBe(true);
+          done();
+        })
+        .catch((error: any) => {
+          expect(error).toBe(null);
+          done();
+        })
+    });
+
+    it.skip('should not raise error deleting non existed containers', (done: Function) => {
       ddm.delContainer('books')
         .then(() => {
           expect(true).toBe(true);  // wrong case

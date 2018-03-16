@@ -16,7 +16,7 @@ const config = {
 		// the entry application code
 		path.resolve(__dirname, 'src/index.ts')
 	],
-	externals: [nodeExternals()], // in order to ignore all modules in node_modules folder
+  externals: [nodeExternals()].concat(['fs', 'path']), // in order to ignore all modules in node_modules folder
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'index.js',

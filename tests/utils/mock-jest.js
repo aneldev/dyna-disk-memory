@@ -3,7 +3,7 @@
 // As documented here: https://facebook.github.io/jest/docs/troubleshooting.html is not working as far of May/17
 if (typeof global === 'undefined' && typeof window !== 'undefined') global = window;
 
-let HIDE_SUCCESS_VALIDATION = false;
+let HIDE_SUCCESS_VALIDATION = true;
 
 // init section
 

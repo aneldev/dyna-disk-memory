@@ -1,13 +1,18 @@
+import {emptyDir, remove} from "fs-extra";
+
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
+import {DynaJobQueue} from "dyna-job-queue";
 import {ISettings, IDynaDiskMemory} from './interfaces';
+import {isFolderEmpty} from "dyna-node-fs";
 
 interface IFolderFile {
   full: string;
   folder: string;
   file: string;
+  containerBase: string;
 }
 
 export class DynaDiskMemoryForNode implements IDynaDiskMemory {
@@ -18,47 +23,99 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     };
 
     if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
+    if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
   private _settings: ISettings;
+  private _jogQueue = new DynaJobQueue();
   public _test_performDiskDelay: number = 0;
 
   public set<TData>(container: string, key: string, data: TData): Promise<void> {
-    return this._saveFile(container, key, data);
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
+      this._saveFile(container, key, data)
+        .then(() => resolve())
+        .catch(reject);
+    });
   }
 
   public get<TData>(container: string, key: string): Promise<TData> {
-    return this._loadFile(container, key);
+    return this._jogQueue.addJobPromise((resolve: (data:TData)=>void, reject: (error: any) => void) => {
+      this._loadFile(container, key)
+        .then(resolve)
+        .catch(reject);
+    });
   }
 
   public del(container: string, key: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
-      const fileName: string = this._generateFilename(container, key).full;
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
+      const fileInfo: IFolderFile = this._generateFilename(container, key);
 
-      fs.exists(fileName, function (exists: boolean) {
-        if (exists) {
-          fs.unlink(fileName, function (err: any) {
-            err && reject(err) || resolve();
-          });
-        }
-        else {
-          reject({errorMessage: `DynaDiskMemory: del: cannot find to del file for container [${container}] and key [${key}]`, fileName});
+      remove(fileInfo.full, (err: any) => {
+        if (err) {
+          reject(err);
+        } else {
+          this._deleteEmptyFolderPath(fileInfo)
+            .then(() => resolve())
+            .catch(reject);
         }
       });
     });
   }
 
+  private _deleteEmptyFolderPath(fileInfo: IFolderFile): Promise<void> {
+    return new Promise<void>((resolve: Function, reject: (error: any) => void) => {
+      let foldersToDel: string[] = [];
+      let folder: string = fileInfo.folder;
+
+      while (folder.length && folder !== this._settings.diskPath.slice(0, -1)) {
+        foldersToDel.push(folder);
+        folder = folder.substr(0, folder.lastIndexOf('/'));
+      }
+
+      let folderToDel: string = foldersToDel.shift();
+      const run = () => {
+        if (folderToDel) {
+          this._deleteEmptyFolder(folderToDel)
+            .then(() => {
+              folderToDel = foldersToDel.shift();
+              if (folderToDel) run(); else resolve();
+            })
+            .catch(reject);
+        }
+        else{
+          resolve(); // no folder
+        }
+      };
+
+      run(); // start
+    });
+  }
+
+  private _deleteEmptyFolder(folder: string): Promise<void> {
+    return isFolderEmpty(folder)
+      .then((isEmpty: boolean) => {
+        if (!isEmpty) return;
+
+        return new Promise<void>((resolve: () => void, reject: (error: any) => void) => {
+          remove(folder, (err: any) => {
+            if (err) reject(err); else resolve();
+          })
+        })
+      });
+  }
+
   public delContainer(container: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
-      this._rmdir(`${this._settings.diskPath}${container}`, (error: any) => {
-        error && reject(error) || resolve();
+    const folder = this._generateFilename(container).folder;
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
+      remove(folder, (err) => {
+        if (err) reject(err); else resolve();
       });
     });
   }
 
   public delAll(): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
-      this._rmdir(this._settings.diskPath, (error: any) => {
+    return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
+      remove(this._settings.diskPath, (error: any) => {
         error && reject(error) || resolve();
       });
     });
@@ -148,15 +205,17 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     });
   }
 
-  private _generateFilename(container: string, key: string): IFolderFile {
+  private _generateFilename(container: string, key: string = ''): IFolderFile {
     const generatedContainer: string = this._getAsciiCodeHash(container);
     const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
 
     const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
     const folder: string = full.substr(0, full.lastIndexOf('/'));
     const file: string = full.substr(full.lastIndexOf('/') + 1);
+    let containerBase: string = `${generatedContainer}/${generatedKey}`;
+    containerBase = containerBase.substr(0, containerBase.lastIndexOf('/'));
 
-    return {full, folder, file};
+    return {full, folder, file, containerBase};
   }
 
   private _getAsciiCodeHash(key: string): string {
