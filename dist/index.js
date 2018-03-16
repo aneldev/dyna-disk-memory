@@ -279,8 +279,6 @@ var DynaDiskMemoryForNode = /** @class */ (function () {
                 return;
             return new Promise(function (resolve, reject) {
                 fs_extra_1.remove(folder, function (err) {
-                    if (!err)
-                        console.log('--- empty folder deleted', folder);
                     if (err)
                         reject(err);
                     else
