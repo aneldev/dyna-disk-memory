@@ -51,6 +51,7 @@
   "license": "MIT",
   "dependencies": {
     "dyna-job-queue": "^1.0.25",
+    "dyna-node-fs": "^1.0.0",
     "dyna-universal": "^0.2.4",
     "fs-extra": "^5.0.0"
   },
@@ -68,7 +69,6 @@
     "babel-runtime": "6.11.6",
     "chokidar": "^1.7.0",
     "dyna-loops": "^1.5.1",
-    "dyna-node-fs": "^1.0.0",
     "file-loader": "0.9.0",
     "font-awesome": "4.6.3",
     "jest": "^20.0.0",
