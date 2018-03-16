@@ -51,9 +51,11 @@
   "license": "MIT",
   "dependencies": {
     "dyna-job-queue": "^1.0.25",
-    "dyna-universal": "^0.2.4"
+    "dyna-universal": "^0.2.4",
+    "fs-extra": "^5.0.0"
   },
   "devDependencies": {
+    "@types/fs-extra": "^5.0.1",
     "@types/jest": "^20.0.8",
     "@types/node": "^7.0.54",
     "awesome-typescript-loader": "^3.4.1",
