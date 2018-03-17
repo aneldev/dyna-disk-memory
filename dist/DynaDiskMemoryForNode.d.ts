@@ -19,5 +19,4 @@ export declare class DynaDiskMemoryForNode implements IDynaDiskMemory {
     private _generateFilename(container, key?);
     private _getAsciiCodeHash(key);
     private _splitText(text, step, separetor);
-    private _rmdir(file, cb);
 }

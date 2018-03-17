@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("child_process"), require("dyna-job-queue"), require("dyna-node-fs"), require("dyna-universal"), require("fs"), require("fs-extra"), require("path"));
+		module.exports = factory(require("child_process"), require("dyna-job-queue"), require("dyna-node-fs"), require("dyna-universal"), require("fs"), require("path"));
 	else if(typeof define === 'function' && define.amd)
-		define("dyna-disk-memory", ["child_process", "dyna-job-queue", "dyna-node-fs", "dyna-universal", "fs", "fs-extra", "path"], factory);
+		define("dyna-disk-memory", ["child_process", "dyna-job-queue", "dyna-node-fs", "dyna-universal", "fs", "path"], factory);
 	else if(typeof exports === 'object')
-		exports["dyna-disk-memory"] = factory(require("child_process"), require("dyna-job-queue"), require("dyna-node-fs"), require("dyna-universal"), require("fs"), require("fs-extra"), require("path"));
+		exports["dyna-disk-memory"] = factory(require("child_process"), require("dyna-job-queue"), require("dyna-node-fs"), require("dyna-universal"), require("fs"), require("path"));
 	else
-		root["dyna-disk-memory"] = factory(root["child_process"], root["dyna-job-queue"], root["dyna-node-fs"], root["dyna-universal"], root["fs"], root["fs-extra"], root["path"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_10__) {
+		root["dyna-disk-memory"] = factory(root["child_process"], root["dyna-job-queue"], root["dyna-node-fs"], root["dyna-universal"], root["fs"], root["path"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__, __WEBPACK_EXTERNAL_MODULE_8__, __WEBPACK_EXTERNAL_MODULE_9__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -73,7 +73,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -195,9 +195,8 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var fs_extra_1 = __webpack_require__(9);
 var fs = __webpack_require__(8);
-var path = __webpack_require__(10);
+var path = __webpack_require__(9);
 var exec = __webpack_require__(4).exec;
 var dyna_job_queue_1 = __webpack_require__(5);
 var dyna_node_fs_1 = __webpack_require__(6);
@@ -231,16 +230,10 @@ var DynaDiskMemoryForNode = /** @class */ (function () {
         var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
             var fileInfo = _this._generateFilename(container, key);
-            fs_extra_1.remove(fileInfo.full, function (err) {
-                if (err) {
-                    reject(err);
-                }
-                else {
-                    _this._deleteEmptyFolderPath(fileInfo)
-                        .then(function () { return resolve(); })
-                        .catch(reject);
-                }
-            });
+            dyna_node_fs_1.deleteFile(fileInfo.full)
+                .then(function () { return _this._deleteEmptyFolderPath(fileInfo); })
+                .then(function () { return resolve(); })
+                .catch(reject);
         });
     };
     DynaDiskMemoryForNode.prototype._deleteEmptyFolderPath = function (fileInfo) {
@@ -277,33 +270,20 @@ var DynaDiskMemoryForNode = /** @class */ (function () {
             .then(function (isEmpty) {
             if (!isEmpty)
                 return;
-            return new Promise(function (resolve, reject) {
-                fs_extra_1.remove(folder, function (err) {
-                    if (err)
-                        reject(err);
-                    else
-                        resolve();
-                });
-            });
+            return dyna_node_fs_1.rmdir(folder);
         });
     };
     DynaDiskMemoryForNode.prototype.delContainer = function (container) {
-        var folder = this._generateFilename(container).folder;
+        var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
-            fs_extra_1.remove(folder, function (err) {
-                if (err)
-                    reject(err);
-                else
-                    resolve();
-            });
+            var folder = _this._generateFilename(container).folder;
+            dyna_node_fs_1.rmdir(folder).then(function () { return resolve(); }).catch(reject);
         });
     };
     DynaDiskMemoryForNode.prototype.delAll = function () {
         var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
-            fs_extra_1.remove(_this._settings.diskPath, function (error) {
-                error && reject(error) || resolve();
-            });
+            dyna_node_fs_1.rmdir(_this._settings.diskPath).then(function () { return resolve(); }).catch(reject);
         });
     };
     DynaDiskMemoryForNode.prototype._saveFile = function (container, key, data) {
@@ -417,11 +397,6 @@ var DynaDiskMemoryForNode = /** @class */ (function () {
             output += '_fc';
         return output;
     };
-    DynaDiskMemoryForNode.prototype._rmdir = function (file, cb) {
-        exec('rm -rf ' + file, function (err, stdout, stderr) {
-            cb(err);
-        });
-    };
     return DynaDiskMemoryForNode;
 }());
 exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
@@ -513,16 +488,10 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
 /* 9 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs-extra");
+module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
 
 /***/ }),
 /* 10 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_10__;
-
-/***/ }),
-/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(0);
