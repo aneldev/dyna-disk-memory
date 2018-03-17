@@ -1,12 +1,11 @@
-import {emptyDir, remove} from "fs-extra";
-
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
 import {DynaJobQueue} from "dyna-job-queue";
+import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
+
 import {ISettings, IDynaDiskMemory} from './interfaces';
-import {isFolderEmpty} from "dyna-node-fs";
 
 interface IFolderFile {
   full: string;
@@ -50,16 +49,11 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
       const fileInfo: IFolderFile = this._generateFilename(container, key);
 
-      remove(fileInfo.full, (err: any) => {
-        if (err) {
-          reject(err);
-        } else {
-          this._deleteEmptyFolderPath(fileInfo)
-            .then(() => resolve())
-            .catch(reject);
-        }
+      deleteFile(fileInfo.full)
+        .then(()=>this._deleteEmptyFolderPath(fileInfo))
+        .then(()=>resolve())
+        .catch(reject);
       });
-    });
   }
 
   private _deleteEmptyFolderPath(fileInfo: IFolderFile): Promise<void> {
@@ -95,29 +89,20 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     return isFolderEmpty(folder)
       .then((isEmpty: boolean) => {
         if (!isEmpty) return;
-
-        return new Promise<void>((resolve: () => void, reject: (error: any) => void) => {
-          remove(folder, (err: any) => {
-            if (err) reject(err); else resolve();
-          })
-        })
+        return rmdir(folder);
       });
   }
 
   public delContainer(container: string): Promise<void> {
-    const folder = this._generateFilename(container).folder;
     return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
-      remove(folder, (err) => {
-        if (err) reject(err); else resolve();
-      });
+      const folder = this._generateFilename(container).folder;
+      rmdir(folder).then(()=>resolve()).catch(reject);
     });
   }
 
   public delAll(): Promise<void> {
     return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
-      remove(this._settings.diskPath, (error: any) => {
-        error && reject(error) || resolve();
-      });
+      rmdir(this._settings.diskPath).then(()=>resolve()).catch(reject);
     });
   }
 
@@ -231,12 +216,6 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     while (se.length) output += se.splice(0, step).join('') + separetor;
     if (output[output.length - 1] == separetor) output += '_fc';
     return output;
-  }
-
-  private _rmdir(file, cb: (error: any) => void): void {
-    exec('rm -rf ' + file, function (err: any, stdout: any, stderr: any) {
-      cb(err);
-    });
   }
 }
 

@@ -51,9 +51,8 @@
   "license": "MIT",
   "dependencies": {
     "dyna-job-queue": "^1.0.25",
-    "dyna-node-fs": "^1.0.0",
-    "dyna-universal": "^0.2.4",
-    "fs-extra": "^5.0.0"
+    "dyna-node-fs": "^1.0.2",
+    "dyna-universal": "^0.2.4"
   },
   "devDependencies": {
     "@types/fs-extra": "^5.0.1",
