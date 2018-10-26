@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 
-import {DynaJobQueue} from "dyna-job-queue";
+import {DynaJobQueue}                     from "dyna-job-queue";
 import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
+import * as md5                           from 'md5';
 
 import {ISettings, IDynaDiskMemory} from './interfaces';
 
@@ -21,7 +22,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
       ...settings
     };
 
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
+    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
     if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
@@ -204,10 +205,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
   }
 
   private _getAsciiCodeHash(key: string): string {
-    return key
-      .split('')
-      .map((c: string) => c.charCodeAt(0))
-      .join('_');
+    return md5(key);
   }
 
   private _splitText(text: string, step: number, separetor: string): string {

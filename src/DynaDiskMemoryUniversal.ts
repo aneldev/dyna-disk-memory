@@ -12,7 +12,7 @@ export class DynaDiskMemoryUniversal {
       _test_performDiskDelay: 0,
       ...settings
     };
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
+    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
 
     if (this._settings._test_workForBrowser)
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
