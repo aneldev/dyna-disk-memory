@@ -8,5 +8,5 @@ export declare class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     del(container: string, key: string): Promise<void>;
     delContainer(container: string): Promise<void>;
     delAll(): Promise<void>;
-    private _generateFilename(container?, key?);
+    private _generateFilename;
 }

@@ -7,16 +7,16 @@ export declare class DynaDiskMemoryForNode implements IDynaDiskMemory {
     set<TData>(container: string, key: string, data: TData): Promise<void>;
     get<TData>(container: string, key: string): Promise<TData>;
     del(container: string, key: string): Promise<void>;
-    private _deleteEmptyFolderPath(fileInfo);
-    private _deleteEmptyFolder(folder);
+    private _deleteEmptyFolderPath;
+    private _deleteEmptyFolder;
     delContainer(container: string): Promise<void>;
     delAll(): Promise<void>;
-    private _saveFile(container, key, data);
-    private _loadFile(container, key);
-    private _createDirectory(directory);
-    private _writeFileOnDisk(folder, fileName, data);
-    private _readFileFromDisk(folder, fileName);
-    private _generateFilename(container, key?);
-    private _getAsciiCodeHash(key);
-    private _splitText(text, step, separetor);
+    private _saveFile;
+    private _loadFile;
+    private _createDirectory;
+    private _writeFileOnDisk;
+    private _readFileFromDisk;
+    private _generateFilename;
+    private _getAsciiCodeHash;
+    private _splitText;
 }
