@@ -11,15 +11,13 @@ const plugins = require('./webpack.plugins');
 
 const config = {
 	target: 'node', // help: https://webpack.github.io/docs/configuration.html#target
-	entry: [
-		// do not load babel-polyfill here, the application should load the polyfills!
-		// the entry application code
-		path.resolve(__dirname, 'src/index.ts')
-	],
+	entry: {
+		index: './src/index.ts',
+	},
   externals: [nodeExternals()].concat(['fs', 'path']), // in order to ignore all modules in node_modules folder
 	output: {
 		path: path.resolve(__dirname, 'dist'),
-		filename: 'index.js',
+		filename: '[name].js',
 		publicPath: '/dist/',
 		library: package_.name,
 		libraryTarget: 'umd',
@@ -34,7 +32,7 @@ const config = {
 	},
 	plugins: plugins.concat([]),
 	node: {
-		fs: "empty"
+		fs: "empty",
 	},
 };
 
