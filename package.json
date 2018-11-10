@@ -1,6 +1,6 @@
 {
   "name": "dyna-disk-memory",
-  "version": "2.0.9",
+  "version": "2.0.10",
   "description": "Tiny lib where uses the disk to save data and not the memory.",
   "repository": {
     "type": "git",
