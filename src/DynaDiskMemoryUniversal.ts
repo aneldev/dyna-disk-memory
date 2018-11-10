@@ -16,7 +16,7 @@ export class DynaDiskMemoryUniversal {
 
     if (this._settings._test_workForBrowser)
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
-    else if (isNode())
+    else if (isNode)
       this._memory = new DynaDiskMemoryForNode(this._settings);
     else
       this._memory = new DynaDiskMemoryForBrowser(this._settings);

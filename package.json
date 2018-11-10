@@ -56,7 +56,7 @@
   "dependencies": {
     "dyna-job-queue": "^1.0.25",
     "dyna-node-fs": "^1.0.2",
-    "dyna-universal": "^0.2.4",
+    "dyna-universal": "^1.3.5",
     "md5": "^2.2.1"
   },
   "devDependencies": {
