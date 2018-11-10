@@ -149,6 +149,21 @@ It doesn’t exist in purpose! The demon is watching the files under the `temp/`
 
 There is no thoughts to extend this library. It is doing something very specific and it is doing this well. Other amazing libraries can be built using this, like: queue handlers, network buffers that they don't want to lose their data if they crashed.
 
+# Troubleshooting
+
+## Webpack cannot resolve `child_process`
+
+Webpack builder for web environments might complain for missing `child_process`.
+
+In this case add this to your Webpack config:
+
+```
+	node: {
+		child_process: "empty",
+	},
+
+```
+
 # Debug, Fork, Dist, Liberté!
 
 This project made with [dyna-ts-module-boilerplate](https://github.com/aneldev/dyna-ts-module-boilerplate), help of it is [here in readme.boilerplate](./readme.boilerplate.md).

@@ -10,9 +10,7 @@
     "target": "es5",
     "allowJs": false,
     "noErrorTruncation": true,
-    "types": [
-      "node"
-    ]
+    "types" : [ "node" ]
   },
   "files": [
     "src/index.ts"

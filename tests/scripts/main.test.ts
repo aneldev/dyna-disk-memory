@@ -345,7 +345,7 @@ const createTest = (forNode: boolean) => {
         })
     });
 
-    it.skip('should not raise error deleting non existed containers', (done: Function) => {
+    it('should not raise error deleting non existed containers', (done: Function) => {
       ddm.delContainer('books')
         .then(() => {
           expect(true).toBe(true);  // wrong case
