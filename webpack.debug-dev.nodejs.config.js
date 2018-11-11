@@ -8,7 +8,7 @@ const nodeExternals = require('webpack-node-externals');
 const rules = require('./webpack.loaders');
 const plugins = require('./webpack.plugins');
 
-console.log('DEBUG with DevTools in nodeJs ');
+console.log('DEBUG with DevTools, open chrome://inspect/#devices');
 console.log('WARNING: you should run the `npm run debug-tests-build` in order to debug your latest changes!');
 
 const config = {
@@ -20,6 +20,7 @@ const config = {
 	optimization: {
 		usedExports: true,       // true to remove the dead code, for more https://webpack.js.org/guides/tree-shaking/
 	},
+	devtool: "source-map",     // help: https://webpack.js.org/configuration/devtool/
 	devServer: {
 		hot: true,
 	},

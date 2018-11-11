@@ -5,9 +5,9 @@ import {mkdir} from "dyna-node-fs";
 
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
-import {isNode, env} from 'dyna-universal';
+import {isNode, universal}              from 'dyna-universal';
+import {forTimes}                       from 'dyna-loops'
 import {DynaDiskMemory} from '../../src';
-import {forTimes} from 'dyna-loops'
 import {randomTextBig, randomTextSmall} from '../utils/randomText';
 
 const STRESS_MODE: Boolean = false; // default for this test: true
@@ -17,11 +17,11 @@ const PERFORM_DISK_DELAY: number = STRESS_MODE ? 100 : 2;
 
 const createTest = (forNode: boolean) => {
   // localStorage polyfill
-  if (!forNode && (typeof env.localStorage === "undefined" || env.localStorage === null)) {
+  if (!forNode && (typeof (universal as Window).localStorage === "undefined" || (universal as Window).localStorage === null)) {
     const LocalStorage = require('node-localstorage').LocalStorage;
     mkdir('./temp/localStoragePolyfill')
       .then(() => {
-        env.localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
+        (universal as any).localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
       });
   }
   let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
@@ -364,7 +364,7 @@ const createTest = (forNode: boolean) => {
 // RUN test tests
 
 // if the test runs under node, then test the DynaDiskMemoryForNode
-if (isNode()) createTest(true);
+if (isNode) createTest(true);
 
 // regardless the environment, test the DynaDiskMemoryForBrowser
 // (in case of node.js the localStorage polyfill will be applied)

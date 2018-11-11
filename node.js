@@ -7,7 +7,7 @@
 		exports["dyna-disk-memory"] = factory(require("fs"), require("path"));
 	else
 		root["dyna-disk-memory"] = factory(root["fs"], root["path"]);
-})(window, function(__WEBPACK_EXTERNAL_MODULE_fs__, __WEBPACK_EXTERNAL_MODULE_path__) {
+})(global, function(__WEBPACK_EXTERNAL_MODULE_fs__, __WEBPACK_EXTERNAL_MODULE_path__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -87,26 +87,14 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/dist/";
+/******/ 	__webpack_require__.p = "/";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.ts");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/node.ts");
 /******/ })
 /************************************************************************/
 /******/ ({
-
-/***/ "./node_modules/node-libs-browser/mock/empty.js":
-/*!******************************************************!*\
-  !*** ./node_modules/node-libs-browser/mock/empty.js ***!
-  \******************************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
 
 /***/ "./src/DynaDiskMemoryForBrowser.ts":
 /*!*****************************************!*\
@@ -274,7 +262,7 @@ var fs = __webpack_require__(/*! fs */ "fs");
 
 var path = __webpack_require__(/*! path */ "path");
 
-var exec = __webpack_require__(/*! child_process */ "./node_modules/node-libs-browser/mock/empty.js").exec;
+var exec = __webpack_require__(/*! child_process */ "child_process").exec;
 
 var dyna_job_queue_1 = __webpack_require__(/*! dyna-job-queue */ "dyna-job-queue");
 
@@ -623,6 +611,41 @@ exports.DynaDiskMemory = DynaDiskMemoryUniversal_1.DynaDiskMemoryUniversal;
 
 /***/ }),
 
+/***/ "./src/node.ts":
+/*!*********************!*\
+  !*** ./src/node.ts ***!
+  \*********************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function __export(m) {
+  for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+__export(__webpack_require__(/*! ./ */ "./src/index.ts"));
+
+/***/ }),
+
+/***/ "child_process":
+/*!********************************!*\
+  !*** external "child_process" ***!
+  \********************************/
+/*! no static exports found */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ "dyna-job-queue":
 /*!*********************************!*\
   !*** external "dyna-job-queue" ***!
@@ -697,4 +720,4 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_path__;
 
 /******/ });
 });
-//# sourceMappingURL=index.js.map
+//# sourceMappingURL=node.js.map

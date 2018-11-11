@@ -23,12 +23,12 @@ const config = {
 	optimization: {
 		usedExports: true,       // true to remove the dead code, for more https://webpack.js.org/guides/tree-shaking/
 	},
+	devtool: "source-map",     // help: https://webpack.js.org/configuration/devtool/
 	devServer: {
 		hot: true,
 		port: serverPort,
 	},
 	externals: [],
-	devtool: 'cheap-module-eval-source-map',
   output: {
     path: path.resolve(__dirname, 'debug-ground/debug-dev-on-browser'),
     filename: 'debug-dev-browser.js'
