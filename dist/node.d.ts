@@ -1,1 +1,2 @@
-export * from "./";
+export { IDynaDiskMemoryConfig } from './interfaces';
+export * from "./DynaDiskMemoryForNode";

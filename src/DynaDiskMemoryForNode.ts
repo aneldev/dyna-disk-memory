@@ -1,12 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-const exec = require('child_process').exec;
 
 import {DynaJobQueue}                     from "dyna-job-queue";
 import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
 import * as md5                           from 'md5';
 
-import {ISettings, IDynaDiskMemory} from './interfaces';
+import {IDynaDiskMemoryConfig, IDynaDiskMemory} from './interfaces';
 
 interface IFolderFile {
   full: string;
@@ -15,8 +14,8 @@ interface IFolderFile {
   containerBase: string;
 }
 
-export class DynaDiskMemoryForNode implements IDynaDiskMemory {
-  constructor(settings: ISettings) {
+export class DynaDiskMemory implements IDynaDiskMemory {
+  constructor(settings: IDynaDiskMemoryConfig) {
     this._settings = {
       fragmentSize: 13,
       ...settings
@@ -26,7 +25,7 @@ export class DynaDiskMemoryForNode implements IDynaDiskMemory {
     if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
-  private _settings: ISettings;
+  private _settings: IDynaDiskMemoryConfig;
   private _jogQueue = new DynaJobQueue();
   public _test_performDiskDelay: number = 0;
 

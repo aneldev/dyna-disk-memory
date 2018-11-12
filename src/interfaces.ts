@@ -1,4 +1,4 @@
-export interface ISettings {
+export interface IDynaDiskMemoryConfig {
   fragmentSize?: number;
   diskPath: string;
   _test_workForBrowser?: boolean;   // force it to work as in browser (for tests under nodejs)

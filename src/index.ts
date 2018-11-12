@@ -1,7 +1,6 @@
-import {ISettings} from './interfaces';
-import {DynaDiskMemoryUniversal as DynaDiskMemory} from './DynaDiskMemoryUniversal';
+// Export for the types
+export {IDynaDiskMemoryConfig} from './interfaces';
+export * from "./DynaDiskMemoryForNode";
 
-export {
-  ISettings,
-  DynaDiskMemory,
-}
+// ... but console error since this export is only for types
+console.error('dyna-disk-memory: you should import from "dyna-disk-memory/web" or "dyna-disk-memory/node"')

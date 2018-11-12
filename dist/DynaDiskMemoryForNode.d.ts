@@ -1,6 +1,6 @@
-import { ISettings, IDynaDiskMemory } from './interfaces';
-export declare class DynaDiskMemoryForNode implements IDynaDiskMemory {
-    constructor(settings: ISettings);
+import { IDynaDiskMemoryConfig, IDynaDiskMemory } from './interfaces';
+export declare class DynaDiskMemory implements IDynaDiskMemory {
+    constructor(settings: IDynaDiskMemoryConfig);
     private _settings;
     private _jogQueue;
     _test_performDiskDelay: number;

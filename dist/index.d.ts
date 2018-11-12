@@ -1,3 +1,2 @@
-import { ISettings } from './interfaces';
-import { DynaDiskMemoryUniversal as DynaDiskMemory } from './DynaDiskMemoryUniversal';
-export { ISettings, DynaDiskMemory, };
+export { IDynaDiskMemoryConfig } from './interfaces';
+export * from "./DynaDiskMemoryForNode";

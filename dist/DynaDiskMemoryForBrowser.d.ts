@@ -1,6 +1,6 @@
-import { IDynaDiskMemory, ISettings } from './interfaces';
-export declare class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
-    constructor(settings: ISettings);
+import { IDynaDiskMemory, IDynaDiskMemoryConfig } from './interfaces';
+export declare class DynaDiskMemory implements IDynaDiskMemory {
+    constructor(settings: IDynaDiskMemoryConfig);
     private _settings;
     _test_performDiskDelay: number;
     set<TData>(container: string, key: string, data: TData): Promise<void>;

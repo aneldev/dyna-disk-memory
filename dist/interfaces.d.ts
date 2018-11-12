@@ -1,4 +1,4 @@
-export interface ISettings {
+export interface IDynaDiskMemoryConfig {
     fragmentSize?: number;
     diskPath: string;
     _test_workForBrowser?: boolean;

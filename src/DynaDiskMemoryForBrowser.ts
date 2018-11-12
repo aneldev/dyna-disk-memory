@@ -1,4 +1,4 @@
-import {IDynaDiskMemory, ISettings} from './interfaces';
+import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 
 interface IFolderFile {
   full: string;
@@ -7,8 +7,8 @@ interface IFolderFile {
   file: string;
 }
 
-export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
-  constructor(settings: ISettings) {
+export class DynaDiskMemory implements IDynaDiskMemory {
+  constructor(settings: IDynaDiskMemoryConfig) {
     this._settings = {
       fragmentSize: 13,
       ...settings
@@ -17,7 +17,7 @@ export class DynaDiskMemoryForBrowser implements IDynaDiskMemory {
     if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
   }
 
-  private _settings: ISettings;
+  private _settings: IDynaDiskMemoryConfig;
   public _test_performDiskDelay: number = 0;
 
   public set<TData>(container: string, key: string, data: TData): Promise<void> {

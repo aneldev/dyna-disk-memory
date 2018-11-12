@@ -96,143 +96,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /************************************************************************/
 /******/ ({
 
-/***/ "./src/DynaDiskMemoryForBrowser.ts":
-/*!*****************************************!*\
-  !*** ./src/DynaDiskMemoryForBrowser.ts ***!
-  \*****************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __assign = this && this.__assign || Object.assign || function (t) {
-  for (var s, i = 1, n = arguments.length; i < n; i++) {
-    s = arguments[i];
-
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-  }
-
-  return t;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var DynaDiskMemoryForBrowser =
-/** @class */
-function () {
-  function DynaDiskMemoryForBrowser(settings) {
-    this._test_performDiskDelay = 0;
-    this._settings = __assign({
-      fragmentSize: 13
-    }, settings);
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
-  }
-
-  DynaDiskMemoryForBrowser.prototype.set = function (container, key, data) {
-    var _this = this;
-
-    return new Promise(function (resolve, reject) {
-      try {
-        var names = _this._generateFilename(container, key);
-
-        localStorage.setItem(names.full, JSON.stringify(data));
-        setTimeout(resolve, _this._test_performDiskDelay);
-      } catch (err) {
-        setTimeout(reject, _this._test_performDiskDelay, err);
-      }
-    });
-  };
-
-  DynaDiskMemoryForBrowser.prototype.get = function (container, key) {
-    var _this = this;
-
-    return new Promise(function (resolve, reject) {
-      try {
-        var names = _this._generateFilename(container, key);
-
-        var rawData = localStorage.getItem(names.full);
-        var data = undefined;
-        if (typeof rawData == 'string') data = JSON.parse(rawData);
-        setTimeout(resolve, _this._test_performDiskDelay, data);
-      } catch (err) {
-        setTimeout(reject, _this._test_performDiskDelay, err);
-      }
-    });
-  };
-
-  DynaDiskMemoryForBrowser.prototype.del = function (container, key) {
-    var _this = this;
-
-    return new Promise(function (resolve, reject) {
-      var names = _this._generateFilename(container, key);
-
-      localStorage.removeItem(names.full);
-      setTimeout(resolve, _this._test_performDiskDelay);
-    });
-  };
-
-  DynaDiskMemoryForBrowser.prototype.delContainer = function (container) {
-    var _this = this;
-
-    return new Promise(function (resolve, reject) {
-      var names = _this._generateFilename(container);
-
-      Object.keys(localStorage).filter(function (key) {
-        return key.startsWith(names.folder + '/');
-      }).forEach(function (key) {
-        return localStorage.removeItem(key);
-      });
-      setTimeout(resolve, _this._test_performDiskDelay);
-    });
-  };
-
-  DynaDiskMemoryForBrowser.prototype.delAll = function () {
-    var _this = this;
-
-    return new Promise(function (resolve, reject) {
-      var names = _this._generateFilename();
-
-      Object.keys(localStorage).filter(function (key) {
-        return key.startsWith(names.base + '/');
-      }).forEach(function (key) {
-        return localStorage.removeItem(key);
-      });
-      setTimeout(resolve, _this._test_performDiskDelay);
-    });
-  };
-
-  DynaDiskMemoryForBrowser.prototype._generateFilename = function (container, key) {
-    if (container === void 0) {
-      container = '---';
-    }
-
-    if (key === void 0) {
-      key = '---';
-    }
-
-    var full = "dyna-disk-memory/" + this._settings.diskPath + container + "/" + key;
-    var base = full.substr(0, full.indexOf('/'));
-    var folder = full.substr(0, full.lastIndexOf('/'));
-    var file = full.substr(full.lastIndexOf('/') + 1);
-    return {
-      full: full,
-      base: base,
-      folder: folder,
-      file: file
-    };
-  };
-
-  return DynaDiskMemoryForBrowser;
-}();
-
-exports.DynaDiskMemoryForBrowser = DynaDiskMemoryForBrowser;
-
-/***/ }),
-
 /***/ "./src/DynaDiskMemoryForNode.ts":
 /*!**************************************!*\
   !*** ./src/DynaDiskMemoryForNode.ts ***!
@@ -262,18 +125,16 @@ var fs = __webpack_require__(/*! fs */ "fs");
 
 var path = __webpack_require__(/*! path */ "path");
 
-var exec = __webpack_require__(/*! child_process */ "child_process").exec;
-
 var dyna_job_queue_1 = __webpack_require__(/*! dyna-job-queue */ "dyna-job-queue");
 
 var dyna_node_fs_1 = __webpack_require__(/*! dyna-node-fs */ "dyna-node-fs");
 
 var md5 = __webpack_require__(/*! md5 */ "md5");
 
-var DynaDiskMemoryForNode =
+var DynaDiskMemory =
 /** @class */
 function () {
-  function DynaDiskMemoryForNode(settings) {
+  function DynaDiskMemory(settings) {
     this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
     this._test_performDiskDelay = 0;
     this._settings = __assign({
@@ -283,7 +144,7 @@ function () {
     if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
-  DynaDiskMemoryForNode.prototype.set = function (container, key, data) {
+  DynaDiskMemory.prototype.set = function (container, key, data) {
     var _this = this;
 
     return this._jogQueue.addJobPromise(function (resolve, reject) {
@@ -293,7 +154,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype.get = function (container, key) {
+  DynaDiskMemory.prototype.get = function (container, key) {
     var _this = this;
 
     return this._jogQueue.addJobPromise(function (resolve, reject) {
@@ -301,7 +162,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype.del = function (container, key) {
+  DynaDiskMemory.prototype.del = function (container, key) {
     var _this = this;
 
     return this._jogQueue.addJobPromise(function (resolve, reject) {
@@ -315,7 +176,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._deleteEmptyFolderPath = function (fileInfo) {
+  DynaDiskMemory.prototype._deleteEmptyFolderPath = function (fileInfo) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
@@ -344,14 +205,14 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._deleteEmptyFolder = function (folder) {
+  DynaDiskMemory.prototype._deleteEmptyFolder = function (folder) {
     return dyna_node_fs_1.isFolderEmpty(folder).then(function (isEmpty) {
       if (!isEmpty) return;
       return dyna_node_fs_1.rmdir(folder);
     });
   };
 
-  DynaDiskMemoryForNode.prototype.delContainer = function (container) {
+  DynaDiskMemory.prototype.delContainer = function (container) {
     var _this = this;
 
     return this._jogQueue.addJobPromise(function (resolve, reject) {
@@ -363,7 +224,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype.delAll = function () {
+  DynaDiskMemory.prototype.delAll = function () {
     var _this = this;
 
     return this._jogQueue.addJobPromise(function (resolve, reject) {
@@ -373,7 +234,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._saveFile = function (container, key, data) {
+  DynaDiskMemory.prototype._saveFile = function (container, key, data) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
@@ -387,7 +248,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._loadFile = function (container, key) {
+  DynaDiskMemory.prototype._loadFile = function (container, key) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
@@ -401,7 +262,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._createDirectory = function (directory) {
+  DynaDiskMemory.prototype._createDirectory = function (directory) {
     // todo: make this async
     return new Promise(function (resolve, reject) {
       try {
@@ -420,7 +281,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._writeFileOnDisk = function (folder, fileName, data) {
+  DynaDiskMemory.prototype._writeFileOnDisk = function (folder, fileName, data) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
@@ -439,7 +300,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._readFileFromDisk = function (folder, fileName) {
+  DynaDiskMemory.prototype._readFileFromDisk = function (folder, fileName) {
     var _this = this;
 
     return new Promise(function (resolve, reject) {
@@ -474,7 +335,7 @@ function () {
     });
   };
 
-  DynaDiskMemoryForNode.prototype._generateFilename = function (container, key) {
+  DynaDiskMemory.prototype._generateFilename = function (container, key) {
     if (key === void 0) {
       key = '';
     }
@@ -496,11 +357,11 @@ function () {
     };
   };
 
-  DynaDiskMemoryForNode.prototype._getAsciiCodeHash = function (key) {
+  DynaDiskMemory.prototype._getAsciiCodeHash = function (key) {
     return md5(key);
   };
 
-  DynaDiskMemoryForNode.prototype._splitText = function (text, step, separetor) {
+  DynaDiskMemory.prototype._splitText = function (text, step, separetor) {
     var output = "";
     var se = text.split('').reverse();
 
@@ -510,104 +371,10 @@ function () {
     return output;
   };
 
-  return DynaDiskMemoryForNode;
+  return DynaDiskMemory;
 }();
 
-exports.DynaDiskMemoryForNode = DynaDiskMemoryForNode;
-
-/***/ }),
-
-/***/ "./src/DynaDiskMemoryUniversal.ts":
-/*!****************************************!*\
-  !*** ./src/DynaDiskMemoryUniversal.ts ***!
-  \****************************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var __assign = this && this.__assign || Object.assign || function (t) {
-  for (var s, i = 1, n = arguments.length; i < n; i++) {
-    s = arguments[i];
-
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-  }
-
-  return t;
-};
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var dyna_universal_1 = __webpack_require__(/*! dyna-universal */ "dyna-universal");
-
-var DynaDiskMemoryForBrowser_1 = __webpack_require__(/*! ./DynaDiskMemoryForBrowser */ "./src/DynaDiskMemoryForBrowser.ts");
-
-var DynaDiskMemoryForNode_1 = __webpack_require__(/*! ./DynaDiskMemoryForNode */ "./src/DynaDiskMemoryForNode.ts");
-
-var DynaDiskMemoryUniversal =
-/** @class */
-function () {
-  function DynaDiskMemoryUniversal(settings) {
-    this._test_performDiskDelay = 0;
-    this._settings = __assign({
-      fragmentSize: 13,
-      _test_workForBrowser: false,
-      _test_performDiskDelay: 0
-    }, settings);
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
-    if (this._settings._test_workForBrowser) this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);else if (dyna_universal_1.isNode) this._memory = new DynaDiskMemoryForNode_1.DynaDiskMemoryForNode(this._settings);else this._memory = new DynaDiskMemoryForBrowser_1.DynaDiskMemoryForBrowser(this._settings);
-    this._memory._test_performDiskDelay = this._test_performDiskDelay;
-  }
-
-  DynaDiskMemoryUniversal.prototype.set = function (container, key, data) {
-    return this._memory.set(container, key, data);
-  };
-
-  DynaDiskMemoryUniversal.prototype.get = function (container, key) {
-    return this._memory.get(container, key);
-  };
-
-  DynaDiskMemoryUniversal.prototype.del = function (container, key) {
-    return this._memory.del(container, key);
-  };
-
-  DynaDiskMemoryUniversal.prototype.delContainer = function (container) {
-    return this._memory.delContainer(container);
-  };
-
-  DynaDiskMemoryUniversal.prototype.delAll = function () {
-    return this._memory.delAll();
-  };
-
-  return DynaDiskMemoryUniversal;
-}();
-
-exports.DynaDiskMemoryUniversal = DynaDiskMemoryUniversal;
-
-/***/ }),
-
-/***/ "./src/index.ts":
-/*!**********************!*\
-  !*** ./src/index.ts ***!
-  \**********************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var DynaDiskMemoryUniversal_1 = __webpack_require__(/*! ./DynaDiskMemoryUniversal */ "./src/DynaDiskMemoryUniversal.ts");
-
-exports.DynaDiskMemory = DynaDiskMemoryUniversal_1.DynaDiskMemoryUniversal;
+exports.DynaDiskMemory = DynaDiskMemory;
 
 /***/ }),
 
@@ -630,19 +397,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-__export(__webpack_require__(/*! ./ */ "./src/index.ts"));
-
-/***/ }),
-
-/***/ "child_process":
-/*!********************************!*\
-  !*** external "child_process" ***!
-  \********************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = require("child_process");
+__export(__webpack_require__(/*! ./DynaDiskMemoryForNode */ "./src/DynaDiskMemoryForNode.ts"));
 
 /***/ }),
 
@@ -667,18 +422,6 @@ module.exports = require("dyna-job-queue");
 /***/ (function(module, exports) {
 
 module.exports = require("dyna-node-fs");
-
-/***/ }),
-
-/***/ "dyna-universal":
-/*!*********************************!*\
-  !*** external "dyna-universal" ***!
-  \*********************************/
-/*! no static exports found */
-/*! all exports used */
-/***/ (function(module, exports) {
-
-module.exports = require("dyna-universal");
 
 /***/ }),
 

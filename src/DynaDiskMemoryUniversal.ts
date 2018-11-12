@@ -1,11 +1,13 @@
-import {isNode} from 'dyna-universal';
-import {IDynaDiskMemory, ISettings} from './interfaces';
+// dev node: This is not used at the moment, will be used once the Webpack supports target: "universal"
 
-import {DynaDiskMemoryForBrowser} from './DynaDiskMemoryForBrowser';
-import {DynaDiskMemoryForNode} from './DynaDiskMemoryForNode';
+import {isNode}                                 from 'dyna-universal';
+import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
+
+import {DynaDiskMemory as DynaDiskMemoryForBrowser} from './DynaDiskMemoryForBrowser';
+import {DynaDiskMemory as DynaDiskMemoryForNode} from './DynaDiskMemoryForNode';
 
 export class DynaDiskMemoryUniversal {
-  constructor(settings: ISettings) {
+  constructor(settings: IDynaDiskMemoryConfig) {
     this._settings = {
       fragmentSize: 13,
       _test_workForBrowser: false,
@@ -25,7 +27,7 @@ export class DynaDiskMemoryUniversal {
   }
 
   public _test_performDiskDelay: number = 0;
-  private _settings: ISettings;
+  private _settings: IDynaDiskMemoryConfig;
   private _memory: IDynaDiskMemory;
 
   public set<TData>(container: string, key: string, data: TData): Promise<void> {

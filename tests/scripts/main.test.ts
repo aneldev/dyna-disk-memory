@@ -42,7 +42,6 @@ const createTest = (forNode: boolean) => {
         {title: 'Gone with the wind', pages: 2000, price: 23.23, isbn: '02760245N4353'}
       )
         .then(() => {
-          expect(true).toBe(true);
           done();
         })
         .catch((error: any) => {
