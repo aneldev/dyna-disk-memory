@@ -1,5 +1,4 @@
 import "dyna-node-console";
-
+import "../dyna/mock-jest";
 import "../dyna/unhandledPromiseRejections";
-
-console.log('Debug module');
+import "./scripts/main.test";

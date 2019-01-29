@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-import {DynaJobQueue}                     from "dyna-job-queue";
+import {DynaJobQueue} from "dyna-job-queue";
 import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
-import * as md5                           from 'md5';
+import * as md5 from 'md5';
 
 import {IDynaDiskMemoryConfig, IDynaDiskMemory} from './interfaces';
 
@@ -15,17 +15,11 @@ interface IFolderFile {
 }
 
 export class DynaDiskMemory implements IDynaDiskMemory {
-  constructor(settings: IDynaDiskMemoryConfig) {
-    this._settings = {
-      fragmentSize: 13,
-      ...settings
-    };
-
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
+  constructor(private readonly _settings: IDynaDiskMemoryConfig) {
+    if (this._settings.diskPath[this._settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
     if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
-  private _settings: IDynaDiskMemoryConfig;
   private _jogQueue = new DynaJobQueue();
   public _test_performDiskDelay: number = 0;
 
@@ -38,7 +32,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   public get<TData>(container: string, key: string): Promise<TData> {
-    return this._jogQueue.addJobPromise((resolve: (data:TData)=>void, reject: (error: any) => void) => {
+    return this._jogQueue.addJobPromise((resolve: (data: TData) => void, reject: (error: any) => void) => {
       this._loadFile(container, key)
         .then(resolve)
         .catch(reject);
@@ -50,10 +44,10 @@ export class DynaDiskMemory implements IDynaDiskMemory {
       const fileInfo: IFolderFile = this._generateFilename(container, key);
 
       deleteFile(fileInfo.full)
-        .then(()=>this._deleteEmptyFolderPath(fileInfo))
-        .then(()=>resolve())
+        .then(() => this._deleteEmptyFolderPath(fileInfo))
+        .then(() => resolve())
         .catch(reject);
-      });
+    });
   }
 
   private _deleteEmptyFolderPath(fileInfo: IFolderFile): Promise<void> {
@@ -66,7 +60,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
         folder = folder.substr(0, folder.lastIndexOf('/'));
       }
 
-      let folderToDel: string = foldersToDel.shift();
+      let folderToDel: string | undefined= foldersToDel.shift();
       const run = () => {
         if (folderToDel) {
           this._deleteEmptyFolder(folderToDel)
@@ -75,8 +69,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
               if (folderToDel) run(); else resolve();
             })
             .catch(reject);
-        }
-        else{
+        } else {
           resolve(); // no folder
         }
       };
@@ -96,13 +89,13 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   public delContainer(container: string): Promise<void> {
     return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
       const folder = this._generateFilename(container).folder;
-      rmdir(folder).then(()=>resolve()).catch(reject);
+      rmdir(folder).then(() => resolve()).catch(reject);
     });
   }
 
   public delAll(): Promise<void> {
     return this._jogQueue.addJobPromise((resolve: Function, reject: (error: any) => void) => {
-      rmdir(this._settings.diskPath).then(()=>resolve()).catch(reject);
+      rmdir(this._settings.diskPath).then(() => resolve()).catch(reject);
     });
   }
 
@@ -181,9 +174,12 @@ export class DynaDiskMemory implements IDynaDiskMemory {
                   reject({code: 1802241811, errorMessage: `Cannot parse file [${fullFileName}]`, error: err});
                 }
             });
-          }
-          else {
-            reject({code: 1802241813, errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`, fullFileName});
+          } else {
+            reject({
+              code: 1802241813,
+              errorMessage: `DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [${folder}] and fileName [${fileName}]`,
+              fullFileName
+            });
           }
         });
       }, this._test_performDiskDelay);
@@ -192,7 +188,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
 
   private _generateFilename(container: string, key: string = ''): IFolderFile {
     const generatedContainer: string = this._getAsciiCodeHash(container);
-    const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize, '/');
+    const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, '/');
 
     const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
     const folder: string = full.substr(0, full.lastIndexOf('/'));

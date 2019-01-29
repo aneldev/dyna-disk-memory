@@ -1,13 +1,12 @@
 declare let jasmine: any, describe: any, expect: any, it: any;
-import {mkdir} from "dyna-node-fs";
 
 // help: https://facebook.github.io/jest/docs/expect.html
 
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
-import {isNode, universal}              from 'dyna-universal';
-import {forTimes}                       from 'dyna-loops'
-import {DynaDiskMemory} from '../../src';
+import {forTimes} from 'dyna-loops'
+import {isNode} from "../../dyna/isNode";
+import {DynaDiskMemory} from '../../src/node';
 import {randomTextBig, randomTextSmall} from '../utils/randomText';
 
 const STRESS_MODE: Boolean = false; // default for this test: true
@@ -16,14 +15,6 @@ const TEST_ITEMS_AMOUNT: number = STRESS_MODE ? 100 : 5;
 const PERFORM_DISK_DELAY: number = STRESS_MODE ? 100 : 2;
 
 const createTest = (forNode: boolean) => {
-  // localStorage polyfill
-  if (!forNode && (typeof (universal as Window).localStorage === "undefined" || (universal as Window).localStorage === null)) {
-    const LocalStorage = require('node-localstorage').LocalStorage;
-    mkdir('./temp/localStoragePolyfill')
-      .then(() => {
-        (universal as any).localStorage = new LocalStorage('./temp/localStoragePolyfill', 1000000); // no limit, we test the library not the localStorage
-      });
-  }
   let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
 
   let ddm: DynaDiskMemory = new DynaDiskMemory({
