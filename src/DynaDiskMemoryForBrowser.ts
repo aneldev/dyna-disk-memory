@@ -1,4 +1,5 @@
 import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
+import md5 = require("md5");
 
 interface IFolderFile {
   full: string;
@@ -75,7 +76,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   private _generateFilename(container: string = '---', key: string = '---'): IFolderFile {
-    const full: string = `dyna-disk-memory/${this._settings.diskPath}${container}/${key}`;
+    const full: string = `dyna-disk-memory/${md5(this._settings.diskPath)}/${container}/${key}`;
     const base: string = full.substr(0, full.indexOf('/'));
     const folder: string = full.substr(0, full.lastIndexOf('/'));
     const file: string = full.substr(full.lastIndexOf('/') + 1);

@@ -22,6 +22,11 @@ var DynaDiskMemory = /** @class */ (function () {
             try {
                 var names = _this._generateFilename(container, key);
                 localStorage.setItem(names.full, JSON.stringify(data));
+                var testRead = localStorage.getItem(names.full);
+                console.debug('####5 testing memory write', names, !!testRead);
+                if (!testRead) {
+                    console.error('####ERRROR_cannot_read_it', { names: names, testRead: testRead });
+                }
                 setTimeout(resolve, _this._test_performDiskDelay);
             }
             catch (err) {
@@ -36,6 +41,9 @@ var DynaDiskMemory = /** @class */ (function () {
                 var names = _this._generateFilename(container, key);
                 var rawData = localStorage.getItem(names.full);
                 var data = undefined;
+                console.debug('####5 reading', names.file, { rawData: rawData, names: names });
+                if (!rawData)
+                    debugger;
                 if (typeof rawData == 'string')
                     data = JSON.parse(rawData);
                 setTimeout(resolve, _this._test_performDiskDelay, data);
@@ -47,14 +55,19 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.del = function (container, key) {
         var _this = this;
+        console.debug('####5 DEL-KEY', container, key);
+        // if (1==1) return Promise.resolve();
         return new Promise(function (resolve, reject) {
             var names = _this._generateFilename(container, key);
+            console.debug('####5 deleting', names.file);
             localStorage.removeItem(names.full);
             setTimeout(resolve, _this._test_performDiskDelay);
         });
     };
     DynaDiskMemory.prototype.delContainer = function (container) {
         var _this = this;
+        console.debug('####5 DEL CONTAINER', container);
+        // if (1==1) return Promise.resolve();
         return new Promise(function (resolve, reject) {
             var names = _this._generateFilename(container);
             Object.keys(localStorage)
@@ -65,6 +78,9 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.delAll = function () {
         var _this = this;
+        console.debug('####5 DEL ALL');
+        //console.trace();
+        // if (1==1) return Promise.resolve();
         return new Promise(function (resolve, reject) {
             var names = _this._generateFilename();
             Object.keys(localStorage)
@@ -76,7 +92,7 @@ var DynaDiskMemory = /** @class */ (function () {
     DynaDiskMemory.prototype._generateFilename = function (container, key) {
         if (container === void 0) { container = '---'; }
         if (key === void 0) { key = '---'; }
-        var full = "dyna-disk-memory/" + this._settings.diskPath + container + "/" + key;
+        var full = "dyna-disk-memory/" + md5(this._settings.diskPath) + "/" + container + "/" + key;
         var base = full.substr(0, full.indexOf('/'));
         var folder = full.substr(0, full.lastIndexOf('/'));
         var file = full.substr(full.lastIndexOf('/') + 1);

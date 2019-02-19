@@ -1,5 +1,5 @@
 // Export for the types
-export {IDynaDiskMemoryConfig} from './interfaces';
+export {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 export * from "./DynaDiskMemoryForNode";
 
 // ... but console error since this export is only for types
