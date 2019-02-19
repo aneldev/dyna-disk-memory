@@ -1,4 +1,4 @@
-import md5 = require("md5");
+import * as md5 from 'md5';
 import {DynaJobQueue} from "dyna-job-queue";
 import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 

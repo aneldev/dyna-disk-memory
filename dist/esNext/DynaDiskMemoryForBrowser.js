@@ -9,6 +9,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+import * as md5 from 'md5';
 import { DynaJobQueue } from "dyna-job-queue";
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(settings) {

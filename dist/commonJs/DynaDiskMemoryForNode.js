@@ -2,9 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
+var md5 = require("md5");
 var dyna_job_queue_1 = require("dyna-job-queue");
 var dyna_node_fs_1 = require("dyna-node-fs");
-var md5 = require("md5");
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(_settings) {
         this._settings = _settings;

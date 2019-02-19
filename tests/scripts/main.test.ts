@@ -6,7 +6,7 @@ if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
 import {forTimes} from 'dyna-loops'
 import {isNode} from "../../dyna/isNode";
-import {DynaDiskMemory} from '../../src/web';
+import {DynaDiskMemory} from '../../src/node';
 import {randomTextBig, randomTextSmall} from '../utils/randomText';
 
 const STRESS_MODE: Boolean = false; // default for this test: true
