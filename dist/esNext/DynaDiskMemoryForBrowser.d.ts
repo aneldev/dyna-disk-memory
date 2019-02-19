@@ -1,6 +1,7 @@
 import { IDynaDiskMemory, IDynaDiskMemoryConfig } from './interfaces';
 export declare class DynaDiskMemory implements IDynaDiskMemory {
     constructor(settings: IDynaDiskMemoryConfig);
+    private _jogQueue;
     private _settings;
     _test_performDiskDelay: number;
     set<TData>(container: string, key: string, data: TData): Promise<void>;

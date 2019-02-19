@@ -1,5 +1,6 @@
-import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 import md5 = require("md5");
+import {DynaJobQueue} from "dyna-job-queue";
+import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 
 interface IFolderFile {
   full: string;
@@ -15,9 +16,16 @@ export class DynaDiskMemory implements IDynaDiskMemory {
       ...settings
     };
 
-    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/'
+    if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
+
+    this.set = this._jogQueue.jobFactory(this.set.bind(this));
+    this.get = this._jogQueue.jobFactory(this.get.bind(this));
+    this.del = this._jogQueue.jobFactory(this.del.bind(this));
+    this.delContainer = this._jogQueue.jobFactory(this.delContainer.bind(this));
+    this.delAll = this._jogQueue.jobFactory(this.delAll.bind(this));
   }
 
+  private _jogQueue = new DynaJobQueue();
   private _settings: IDynaDiskMemoryConfig;
   public _test_performDiskDelay: number = 0;
 
