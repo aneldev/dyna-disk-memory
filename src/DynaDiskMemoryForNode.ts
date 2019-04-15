@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 import * as md5 from 'md5';
 
-import {DynaJobQueue} from "dyna-job-queue";
+import {DynaJobQueue} from "dyna-job-queue/dist/commonJs/node";
 import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
 
 import {IDynaDiskMemoryConfig, IDynaDiskMemory} from './interfaces';

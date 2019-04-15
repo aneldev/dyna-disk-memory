@@ -12,10 +12,10 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var md5 = require("md5");
-var dyna_job_queue_1 = require("dyna-job-queue");
+var web_1 = require("dyna-job-queue/dist/commonJs/web");
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(settings) {
-        this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
+        this._jogQueue = new web_1.DynaJobQueue();
         this._test_performDiskDelay = 0;
         this._settings = __assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')

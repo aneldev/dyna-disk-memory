@@ -1,5 +1,5 @@
 import * as md5 from 'md5';
-import {DynaJobQueue} from "dyna-job-queue";
+import {DynaJobQueue} from "dyna-job-queue/dist/commonJs/web";
 import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 
 interface IFolderFile {

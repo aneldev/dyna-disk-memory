@@ -48,7 +48,7 @@
   "author": "Anel dev",
   "license": "MIT",
   "dependencies": {
-    "dyna-job-queue": "^3.0.0",
+    "dyna-job-queue": "^4.0.1",
     "dyna-node-fs": "^1.0.2",
     "dyna-universal": "^1.3.5",
     "md5": "^2.2.1"

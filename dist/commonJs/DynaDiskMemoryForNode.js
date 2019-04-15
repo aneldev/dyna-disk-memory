@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
 var md5 = require("md5");
-var dyna_job_queue_1 = require("dyna-job-queue");
+var node_1 = require("dyna-job-queue/dist/commonJs/node");
 var dyna_node_fs_1 = require("dyna-node-fs");
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(_settings) {
         this._settings = _settings;
-        this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
+        this._jogQueue = new node_1.DynaJobQueue();
         this._test_performDiskDelay = 0;
         if (this._settings.diskPath[this._settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
