@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 import * as md5 from 'md5';
 
-import {DynaJobQueue} from "dyna-job-queue/dist/commonJs/node";
+import {DynaJobQueue} from "dyna-job-queue";
 import {deleteFile, isFolderEmpty, rmdir} from "dyna-node-fs";
 
 import {IDynaDiskMemoryConfig, IDynaDiskMemory} from './interfaces';
@@ -114,12 +114,12 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   private _loadFile(container: string, key: string): Promise<any> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return new Promise((resolve: Function) => {
       let fileNames: IFolderFile = this._generateFilename(container, key);
 
       this._readFileFromDisk(fileNames.folder, fileNames.file)
         .then((data: any) => resolve(data))
-        .catch((error: any) => resolve(undefined));
+        .catch(() => resolve(undefined));
     });
   }
 

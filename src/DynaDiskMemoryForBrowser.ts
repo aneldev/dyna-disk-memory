@@ -1,5 +1,5 @@
 import * as md5 from 'md5';
-import {DynaJobQueue} from "dyna-job-queue/dist/commonJs/web";
+import {DynaJobQueue} from "dyna-job-queue";
 import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
 
 interface IFolderFile {
@@ -56,7 +56,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   public del(container: string, key: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return new Promise((resolve: Function) => {
       const names: IFolderFile = this._generateFilename(container, key);
       localStorage.removeItem(names.full);
       setTimeout(resolve, this._test_performDiskDelay);
@@ -64,7 +64,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   public delContainer(container: string): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return new Promise((resolve: Function) => {
       const names: IFolderFile = this._generateFilename(container);
       Object.keys(localStorage)
         .filter((key: string) => key.startsWith(names.folder + '/'))
@@ -74,7 +74,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   }
 
   public delAll(): Promise<void> {
-    return new Promise((resolve: Function, reject: (error: any) => void) => {
+    return new Promise((resolve: Function) => {
       const names: IFolderFile = this._generateFilename();
       Object.keys(localStorage)
         .filter((key: string) => key.startsWith(names.base + '/'))
