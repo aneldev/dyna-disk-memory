@@ -10,7 +10,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 import * as md5 from 'md5';
-import { DynaJobQueue } from "dyna-job-queue/dist/commonJs/web";
+import { DynaJobQueue } from "dyna-job-queue";
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(settings) {
         this._jogQueue = new DynaJobQueue();
@@ -55,7 +55,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.del = function (container, key) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename(container, key);
             localStorage.removeItem(names.full);
             setTimeout(resolve, _this._test_performDiskDelay);
@@ -63,7 +63,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.delContainer = function (container) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename(container);
             Object.keys(localStorage)
                 .filter(function (key) { return key.startsWith(names.folder + '/'); })
@@ -73,7 +73,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.delAll = function () {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename();
             Object.keys(localStorage)
                 .filter(function (key) { return key.startsWith(names.base + '/'); })

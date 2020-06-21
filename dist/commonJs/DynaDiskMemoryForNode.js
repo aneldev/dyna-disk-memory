@@ -3,12 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var fs = require('fs');
 var path = require('path');
 var md5 = require("md5");
-var node_1 = require("dyna-job-queue/dist/commonJs/node");
+var dyna_job_queue_1 = require("dyna-job-queue");
 var dyna_node_fs_1 = require("dyna-node-fs");
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(_settings) {
         this._settings = _settings;
-        this._jogQueue = new node_1.DynaJobQueue();
+        this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
         this._test_performDiskDelay = 0;
         if (this._settings.diskPath[this._settings.diskPath.length - 1] !== '/')
             this._settings.diskPath += '/';
@@ -106,11 +106,11 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype._loadFile = function (container, key) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var fileNames = _this._generateFilename(container, key);
             _this._readFileFromDisk(fileNames.folder, fileNames.file)
                 .then(function (data) { return resolve(data); })
-                .catch(function (error) { return resolve(undefined); });
+                .catch(function () { return resolve(undefined); });
         });
     };
     DynaDiskMemory.prototype._createDirectory = function (directory) {

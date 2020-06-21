@@ -12,10 +12,10 @@ var __assign = (this && this.__assign) || function () {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var md5 = require("md5");
-var web_1 = require("dyna-job-queue/dist/commonJs/web");
+var dyna_job_queue_1 = require("dyna-job-queue");
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(settings) {
-        this._jogQueue = new web_1.DynaJobQueue();
+        this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
         this._test_performDiskDelay = 0;
         this._settings = __assign({ fragmentSize: 13 }, settings);
         if (settings.diskPath[settings.diskPath.length - 1] !== '/')
@@ -57,7 +57,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.del = function (container, key) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename(container, key);
             localStorage.removeItem(names.full);
             setTimeout(resolve, _this._test_performDiskDelay);
@@ -65,7 +65,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.delContainer = function (container) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename(container);
             Object.keys(localStorage)
                 .filter(function (key) { return key.startsWith(names.folder + '/'); })
@@ -75,7 +75,7 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype.delAll = function () {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var names = _this._generateFilename();
             Object.keys(localStorage)
                 .filter(function (key) { return key.startsWith(names.base + '/'); })

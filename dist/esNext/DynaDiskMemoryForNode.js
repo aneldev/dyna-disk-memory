@@ -1,7 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 import * as md5 from 'md5';
-import { DynaJobQueue } from "dyna-job-queue/dist/commonJs/node";
+import { DynaJobQueue } from "dyna-job-queue";
 import { deleteFile, isFolderEmpty, rmdir } from "dyna-node-fs";
 var DynaDiskMemory = /** @class */ (function () {
     function DynaDiskMemory(_settings) {
@@ -104,11 +104,11 @@ var DynaDiskMemory = /** @class */ (function () {
     };
     DynaDiskMemory.prototype._loadFile = function (container, key) {
         var _this = this;
-        return new Promise(function (resolve, reject) {
+        return new Promise(function (resolve) {
             var fileNames = _this._generateFilename(container, key);
             _this._readFileFromDisk(fileNames.folder, fileNames.file)
                 .then(function (data) { return resolve(data); })
-                .catch(function (error) { return resolve(undefined); });
+                .catch(function () { return resolve(undefined); });
         });
     };
     DynaDiskMemory.prototype._createDirectory = function (directory) {
