@@ -4,7 +4,7 @@ declare let jasmine: any, describe: any, expect: any, it: any;
 
 if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
 
-import {forTimes} from 'dyna-loops'
+import {forTimes} from 'dyna-loops';
 import {isNode} from "../../dyna/isNode";
 import {DynaDiskMemory} from '../../src/node';
 import {randomTextBig, randomTextSmall} from '../utils/randomText';
@@ -176,7 +176,7 @@ const createTest = (forNode: boolean) => {
           expect(error).toBe(null);
           console.error(error);
           done();
-        })
+        });
     });
 
     it('should not get the deleted key', (done: Function) => {
@@ -189,7 +189,7 @@ const createTest = (forNode: boolean) => {
           expect(error).not.toBe(null);
           console.error(error);
           done();
-        })
+        });
     });
 
     it(`should get again the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
@@ -308,7 +308,7 @@ const createTest = (forNode: boolean) => {
         .catch((error: any) => {
           expect(error).toBe(null);
           done();
-        })
+        });
     });
 
     it('should delete the novels container', (done: Function) => {
@@ -320,7 +320,7 @@ const createTest = (forNode: boolean) => {
         .catch((error: any) => {
           expect(error).toBe(null);
           done();
-        })
+        });
     });
 
     it('should delete the novels container', (done: Function) => {
@@ -332,7 +332,7 @@ const createTest = (forNode: boolean) => {
         .catch((error: any) => {
           expect(error).toBe(null);
           done();
-        })
+        });
     });
 
     it('should not raise error deleting non existed containers', (done: Function) => {

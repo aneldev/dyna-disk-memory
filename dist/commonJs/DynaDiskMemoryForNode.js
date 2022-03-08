@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DynaDiskMemory = void 0;
 var fs = require('fs');
 var path = require('path');
 var md5 = require("md5");
@@ -35,7 +36,7 @@ var DynaDiskMemory = /** @class */ (function () {
         var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
             var fileInfo = _this._generateFilename(container, key);
-            dyna_node_fs_1.deleteFile(fileInfo.full)
+            (0, dyna_node_fs_1.deleteFile)(fileInfo.full)
                 .then(function () { return _this._deleteEmptyFolderPath(fileInfo); })
                 .then(function () { return resolve(); })
                 .catch(reject);
@@ -71,24 +72,24 @@ var DynaDiskMemory = /** @class */ (function () {
         });
     };
     DynaDiskMemory.prototype._deleteEmptyFolder = function (folder) {
-        return dyna_node_fs_1.isFolderEmpty(folder)
+        return (0, dyna_node_fs_1.isFolderEmpty)(folder)
             .then(function (isEmpty) {
             if (!isEmpty)
                 return;
-            return dyna_node_fs_1.rmdir(folder);
+            return (0, dyna_node_fs_1.rmdir)(folder);
         });
     };
     DynaDiskMemory.prototype.delContainer = function (container) {
         var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
             var folder = _this._generateFilename(container).folder;
-            dyna_node_fs_1.rmdir(folder).then(function () { return resolve(); }).catch(reject);
+            (0, dyna_node_fs_1.rmdir)(folder).then(function () { return resolve(); }).catch(reject);
         });
     };
     DynaDiskMemory.prototype.delAll = function () {
         var _this = this;
         return this._jogQueue.addJobPromise(function (resolve, reject) {
-            dyna_node_fs_1.rmdir(_this._settings.diskPath).then(function () { return resolve(); }).catch(reject);
+            (0, dyna_node_fs_1.rmdir)(_this._settings.diskPath).then(function () { return resolve(); }).catch(reject);
         });
     };
     DynaDiskMemory.prototype._saveFile = function (container, key, data) {
@@ -135,14 +136,14 @@ var DynaDiskMemory = /** @class */ (function () {
     DynaDiskMemory.prototype._writeFileOnDisk = function (folder, fileName, data) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var fullPath = folder + "/" + fileName;
+            var fullPath = "".concat(folder, "/").concat(fileName);
             setTimeout(function () {
                 fs.exists(fullPath, function (exists) {
                     if (exists)
                         fs.unlinkSync(fullPath);
-                    fs.writeFile("" + fullPath, JSON.stringify(data), function (err) {
+                    fs.writeFile("".concat(fullPath), JSON.stringify(data), function (err) {
                         if (err)
-                            reject({ errorMessage: "Cannot write file [" + fullPath + "]", error: err });
+                            reject({ errorMessage: "Cannot write file [".concat(fullPath, "]"), error: err });
                         else
                             resolve();
                     });
@@ -154,25 +155,25 @@ var DynaDiskMemory = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
-                var fullFileName = folder + "/" + fileName;
+                var fullFileName = "".concat(folder, "/").concat(fileName);
                 fs.exists(fullFileName, function (exists) {
                     if (exists) {
                         fs.readFile(fullFileName, 'utf8', function (err, data) {
                             if (err)
-                                reject({ code: 1802241812, errorMessage: "Cannot read file [" + fullFileName + "]", error: err });
+                                reject({ code: 1802241812, errorMessage: "Cannot read file [".concat(fullFileName, "]"), error: err });
                             else
                                 try {
                                     resolve(JSON.parse(data));
                                 }
                                 catch (error) {
-                                    reject({ code: 1802241811, errorMessage: "Cannot parse file [" + fullFileName + "]", error: err });
+                                    reject({ code: 1802241811, errorMessage: "Cannot parse file [".concat(fullFileName, "]"), error: err });
                                 }
                         });
                     }
                     else {
                         reject({
                             code: 1802241813,
-                            errorMessage: "DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [" + folder + "] and fileName [" + fileName + "]",
+                            errorMessage: "DynaDiskMemory: _readFileFromDisk: cannot find to read file for folder [".concat(folder, "] and fileName [").concat(fileName, "]"),
                             fullFileName: fullFileName
                         });
                     }
@@ -184,10 +185,10 @@ var DynaDiskMemory = /** @class */ (function () {
         if (key === void 0) { key = ''; }
         var generatedContainer = this._getAsciiCodeHash(container);
         var generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, '/');
-        var full = "" + this._settings.diskPath + generatedContainer + "/" + generatedKey;
+        var full = "".concat(this._settings.diskPath).concat(generatedContainer, "/").concat(generatedKey);
         var folder = full.substr(0, full.lastIndexOf('/'));
         var file = full.substr(full.lastIndexOf('/') + 1);
-        var containerBase = generatedContainer + "/" + generatedKey;
+        var containerBase = "".concat(generatedContainer, "/").concat(generatedKey);
         containerBase = containerBase.substr(0, containerBase.lastIndexOf('/'));
         return { full: full, folder: folder, file: file, containerBase: containerBase };
     };
