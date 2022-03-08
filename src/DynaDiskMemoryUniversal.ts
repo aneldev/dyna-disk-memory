@@ -1,7 +1,9 @@
-// dev node: This is not used at the moment, will be used once the Webpack supports target: "universal"
+// Dev node: This is not used at the moment, will be used once the Webpack supports target: "universal"
 
 import {isNode}                                 from 'dyna-universal';
-import {IDynaDiskMemory, IDynaDiskMemoryConfig} from './interfaces';
+import {
+  IDynaDiskMemory, IDynaDiskMemoryConfig,
+} from './interfaces';
 
 import {DynaDiskMemory as DynaDiskMemoryForBrowser} from './DynaDiskMemoryForBrowser';
 import {DynaDiskMemory as DynaDiskMemoryForNode} from './DynaDiskMemoryForNode';
@@ -12,16 +14,19 @@ export class DynaDiskMemoryUniversal {
       fragmentSize: 13,
       _test_workForBrowser: false,
       _test_performDiskDelay: 0,
-      ...settings
+      ...settings,
     };
     if (settings.diskPath[settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
 
-    if (this._settings._test_workForBrowser)
+    if (this._settings._test_workForBrowser) {
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
-    else if (isNode)
+    }
+    else if (isNode) {
       this._memory = new DynaDiskMemoryForNode(this._settings);
-    else
+    }
+    else {
       this._memory = new DynaDiskMemoryForBrowser(this._settings);
+    }
 
     this._memory._test_performDiskDelay = this._test_performDiskDelay;
   }

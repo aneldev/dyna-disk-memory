@@ -1,3 +1,5 @@
-export  {IDynaDiskMemoryConfig} from './interfaces';
+export  {
+  IDynaDiskMemoryConfig,
+} from './interfaces';
 
 export * from "./DynaDiskMemoryForBrowser";

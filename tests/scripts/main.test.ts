@@ -1,23 +1,26 @@
 declare let jasmine: any, describe: any, expect: any, it: any;
 
-// help: https://facebook.github.io/jest/docs/expect.html
+// Help: https://facebook.github.io/jest/docs/expect.html
 
-if (typeof jasmine !== 'undefined') jasmine.DEFAULT_TIMEOUT_INTERVAL = 25000;
+if (typeof jasmine !== 'undefined') jest.setTimeout(25000);
 
 import {forTimes} from 'dyna-loops';
 import {isNode} from "../../dyna/isNode";
 import {DynaDiskMemory} from '../../src/node';
-import {randomTextBig, randomTextSmall} from '../utils/randomText';
+import {
+  randomTextBig,
+  randomTextSmall,
+} from '../utils/randomText';
 
-const STRESS_MODE: Boolean = false; // default for this test: true
+const STRESS_MODE: boolean = false; // Default for this test: true
 
 const TEST_ITEMS_AMOUNT: number = STRESS_MODE ? 100 : 5;
 const PERFORM_DISK_DELAY: number = STRESS_MODE ? 100 : 2;
 
 const createTest = (forNode: boolean) => {
-  let randomText: string[] = forNode ? randomTextBig : randomTextSmall;
+  const randomText: string[] = forNode ? randomTextBig : randomTextSmall;
 
-  let ddm: DynaDiskMemory = new DynaDiskMemory({
+  const ddm: DynaDiskMemory = new DynaDiskMemory({
     diskPath: './temp/dynaDiskMemoryTest',
     _test_workForBrowser: !forNode,
   });
@@ -25,12 +28,17 @@ const createTest = (forNode: boolean) => {
 
   describe('Dyna disk test for ' + (forNode ? 'node' : 'browser'), () => {
 
-    // write / read one key
+    // Write / read one key
 
-    it('should set a key', (done: Function) => {
+    it('should set a key', (done: () => void) => {
       ddm.set(
         'books', '#39922323',
-        {title: 'Gone with the wind', pages: 2000, price: 23.23, isbn: '02760245N4353'}
+        {
+          title: 'Gone with the wind',
+          pages: 2000,
+          price: 23.23,
+          isbn: '02760245N4353',
+        },
       )
         .then(() => {
           done();
@@ -41,7 +49,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should get this key', (done: Function) => {
+    it('should get this key', (done: () => void) => {
       ddm.get('books', '#39922323')
         .then((data: any) => {
           expect(data.title).toBe('Gone with the wind');
@@ -57,9 +65,9 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    // get test
+    // Get test
 
-    it('should get undefined for unknown keys', (done: Function) => {
+    it('should get undefined for unknown keys', (done: () => void) => {
       ddm.get('books', '#key-that-does-no-exist')
         .then((data: any) => {
           expect(data).toBe(undefined);
@@ -72,15 +80,18 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    // write and rewrite shorter key
+    // Write and rewrite shorter key
 
-    it('should set a key with big data size', (done: Function) => {
+    it('should set a key with big data size', (done: () => void) => {
       ddm.set(
         'books', '#305986703624',
         {
-          title: 'Gone with the wind', pages: 2000, price: 23.23, isbn: '02760245N4353',
+          title: 'Gone with the wind',
+          pages: 2000,
+          price: 23.23,
+          isbn: '02760245N4353',
           someBigData: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-        }
+        },
       )
         .then(() => {
           expect(true).toBe(true);
@@ -93,10 +104,14 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should set again the same key with smaller data size', (done: Function) => {
+    it('should set again the same key with smaller data size', (done: () => void) => {
       ddm.set(
         'books', '#305986703624',
-        {title: 'Gone with the wind', pages: 2000, price: 23.23}
+        {
+          title: 'Gone with the wind',
+          pages: 2000,
+          price: 23.23,
+        },
       )
         .then(() => {
           expect(true).toBe(true);
@@ -109,7 +124,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should get the key with the smaller data size correctly', (done: Function) => {
+    it('should get the key with the smaller data size correctly', (done: () => void) => {
       ddm.get('books', '#305986703624')
         .then((data: any) => {
           expect(data.title).toBe('Gone with the wind');
@@ -124,14 +139,19 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    // write / read 100 keys delete in the mean time
+    // Write / read 100 keys delete in the mean time
 
-    it(`should set a ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
+    it(`should set a ${TEST_ITEMS_AMOUNT} keys with large data`, (done: () => void) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         ddm.set(
           'books', `${i}-superdooperkey`,
-          {title: `Test book with key ${i}`, pages: i * 23, price: i * 0.87, isbn: `02760245N4353-${i}`}
+          {
+            title: `Test book with key ${i}`,
+            pages: i * 23,
+            price: i * 0.87,
+            isbn: `02760245N4353-${i}`,
+          },
         )
           .then(() => {
             expect(true).toBe(true);
@@ -146,7 +166,7 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    it(`should get the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
+    it(`should get the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: () => void) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         ddm.get('books', `${i}-superdooperkey`)
@@ -166,7 +186,7 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    it('should delete a key', (done: Function) => {
+    it('should delete a key', (done: () => void) => {
       ddm.del('books', '#39922323')
         .then(() => {
           expect(true).toBe(true);
@@ -179,7 +199,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should not get the deleted key', (done: Function) => {
+    it('should not get the deleted key', (done: () => void) => {
       ddm.get('books', '#39922323')
         .then((data) => {
           expect(data).toBe(undefined);
@@ -192,7 +212,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it(`should get again the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: Function) => {
+    it(`should get again the ${TEST_ITEMS_AMOUNT} keys with large data`, (done: () => void) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         ddm.get('books', `${i}-superdooperkey`)
@@ -210,16 +230,20 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    // test small to large keys
+    // Test small to large keys
 
-    it(`should set a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: Function) => {
+    it(`should set a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: () => void) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         let key: string = '';
         forTimes(i + 1, () => key += '.');
         ddm.set(
           'magazines', key,
-          {title: `Magazine of ${i}${i * 13}`, price: i * 0.87, barcode: `9981155481${i}`}
+          {
+            title: `Magazine of ${i}${i * 13}`,
+            price: i * 0.87,
+            barcode: `9981155481${i}`,
+          },
         )
           .then(() => {
             expect(true).toBe(true);
@@ -233,7 +257,7 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    it(`should get a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: Function) => {
+    it(`should get a keys from small to big key length (max ${TEST_ITEMS_AMOUNT})`, (done: () => void) => {
       let success: number = 0;
       forTimes(TEST_ITEMS_AMOUNT, (i: number) => {
         let key: string = '';
@@ -254,15 +278,19 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    // test with random text
+    // Test with random text
 
-    it(`should set a keys from random text db (items: ${randomText.length})`, (done: Function) => {
+    it(`should set a keys from random text db (items: ${randomText.length})`, (done: () => void) => {
       let success: number = 0;
       randomText.forEach((text: string, i: number) => {
         const key: string = text;
         ddm.set(
           'novels', key,
-          {title: `Novel; ${key}`, price: i * 3.87, isbn: `XXX9981155481${i}${key}`}
+          {
+            title: `Novel; ${key}`,
+            price: i * 3.87,
+            isbn: `XXX9981155481${i}${key}`,
+          },
         )
           .then(() => {
             expect(true).toBe(true);
@@ -277,7 +305,7 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    it(`should get a keys from random text db (items: ${randomText.length})`, (done: Function) => {
+    it(`should get a keys from random text db (items: ${randomText.length})`, (done: () => void) => {
       let success: number = 0;
       randomText.forEach((text: string, i: number) => {
         const key: string = text;
@@ -297,9 +325,9 @@ const createTest = (forNode: boolean) => {
       });
     });
 
-    // delete test
+    // Delete test
 
-    it('should delete the book container', (done: Function) => {
+    it('should delete the book container', (done: () => void) => {
       ddm.delContainer('books')
         .then(() => {
           expect(true).toBe(true);
@@ -311,7 +339,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should delete the novels container', (done: Function) => {
+    it('should delete the novels container', (done: () => void) => {
       ddm.delContainer('magazines')
         .then(() => {
           expect(true).toBe(true);
@@ -323,7 +351,7 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should delete the novels container', (done: Function) => {
+    it('should delete the novels container', (done: () => void) => {
       ddm.delContainer('novels')
         .then(() => {
           expect(true).toBe(true);
@@ -335,10 +363,10 @@ const createTest = (forNode: boolean) => {
         });
     });
 
-    it('should not raise error deleting non existed containers', (done: Function) => {
+    it('should not raise error deleting non existed containers', (done: () => void) => {
       ddm.delContainer('books')
         .then(() => {
-          expect(true).toBe(true);  // wrong case
+          expect(true).toBe(true);  // Wrong case
           done();
         })
         .catch((error: any) => {
@@ -353,9 +381,9 @@ const createTest = (forNode: boolean) => {
 
 // RUN test tests
 
-// if the test runs under node, then test the DynaDiskMemoryForNode
+// If the test runs under node, then test the DynaDiskMemoryForNode
 if (isNode) createTest(true);
 
-// regardless the environment, test the DynaDiskMemoryForBrowser
+// Regardless the environment, test the DynaDiskMemoryForBrowser
 // (in case of node.js the localStorage polyfill will be applied)
 createTest(false);
