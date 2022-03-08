@@ -4,6 +4,8 @@
       "es2015",
       "es2015.promise",
       "es2016",
+      "es6",
+      "es7",
       "es2017",
       "dom"
     ],
@@ -37,7 +39,8 @@
     ]
   },
   "files": [
-    "./src/index.ts"
+    "./src/browser/index.ts",
+    "./src/node/index.ts"
   ],
   "exclude": [
     "node_modules",

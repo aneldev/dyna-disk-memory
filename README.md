@@ -28,7 +28,8 @@ You can delete a `container` or delete all `containers` at once to clean up your
 
 ```
 // import
-import {DynaDiskMemory} from 'dyna-disk-memory';
+import {DynaDiskMemory} from 'dyna-disk-memory/dist/commonJs/node';     // For node
+import {DynaDiskMemory} from 'dyna-disk-memory/dist/commonJs/browser';  // For browser
 
 // create a memory
 const memory = new DynaDiskMemory({

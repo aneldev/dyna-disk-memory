@@ -1,6 +1,6 @@
 {
   "name": "dyna-disk-memory",
-  "version": "4.0.4",
+  "version": "5.0.0",
   "description": "Tiny lib where uses the disk to save data and not the memory.",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "debug-tests": "yarn debug-jest",
     "debug-jest": "node --inspect-brk node_modules/.bin/jest --runInBand",
     "analyze": "set NODE_ENV=development && webpack --config webpack.dist.analyze.config.js",
-    "build": "yarn lint && set NODE_ENV=production && rm -rf ./dist; node tsconfig.update.js && tsc --p tsconfig.commonJs.json && tsc --p tsconfig.esNext.json",
+    "build": "set NODE_ENV=production && rm -rf ./dist; node tsconfig.update.js && tsc --p tsconfig.commonJs.json && tsc --p tsconfig.esNext.json",
     "build-watch-commonJs": "rm -rf ./dist/commonJs; node tsconfig.update.js && tsc --watch --p tsconfig.commonJs.json",
     "build-watch-esNext": "rm -rf ./dist/esNext; node tsconfig.update.js && tsc --watch --p tsconfig.esNext.json",
     "lint": "eslint -c .eslintrc.js ./src ./tests",
