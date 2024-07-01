@@ -22,7 +22,7 @@ interface IFolderFile {
 
 export class DynaDiskMemory implements IDynaDiskMemory {
   constructor(private readonly _settings: IDynaDiskMemoryConfig) {
-    if (this._settings.diskPath[this._settings.diskPath.length - 1] !== '/') this._settings.diskPath += '/';
+    if (this._settings.diskPath[this._settings.diskPath.length - 1] !== path.sep) this._settings.diskPath += path.sep;
     if (this._test_performDiskDelay) console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
   }
 
@@ -63,7 +63,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
 
       while (folder.length && folder !== this._settings.diskPath.slice(0, -1)) {
         foldersToDel.push(folder);
-        folder = folder.substr(0, folder.lastIndexOf('/'));
+        folder = folder.substring(0, folder.lastIndexOf(path.sep));
       }
 
       let folderToDel: string | undefined = foldersToDel.shift();
@@ -215,13 +215,13 @@ export class DynaDiskMemory implements IDynaDiskMemory {
 
   private _generateFilename(container: string, key: string = ''): IFolderFile {
     const generatedContainer: string = this._getAsciiCodeHash(container);
-    const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, '/');
+    const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, path.sep);
 
     const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
-    const folder: string = full.substr(0, full.lastIndexOf('/'));
-    const file: string = full.substr(full.lastIndexOf('/') + 1);
+    const folder: string = full.substring(0, full.lastIndexOf(path.sep));
+    const file: string = full.substring(full.lastIndexOf(path.sep) + 1);
     let containerBase: string = `${generatedContainer}/${generatedKey}`;
-    containerBase = containerBase.substr(0, containerBase.lastIndexOf('/'));
+    containerBase = containerBase.substring(0, containerBase.lastIndexOf(path.sep));
 
     return {
       full,
@@ -243,4 +243,3 @@ export class DynaDiskMemory implements IDynaDiskMemory {
     return output;
   }
 }
-
