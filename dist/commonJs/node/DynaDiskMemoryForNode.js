@@ -11,8 +11,8 @@ var DynaDiskMemory = /** @class */ (function () {
         this._settings = _settings;
         this._jogQueue = new dyna_job_queue_1.DynaJobQueue();
         this._test_performDiskDelay = 0;
-        if (this._settings.diskPath[this._settings.diskPath.length - 1] !== '/')
-            this._settings.diskPath += '/';
+        if (this._settings.diskPath[this._settings.diskPath.length - 1] !== path.sep)
+            this._settings.diskPath += path.sep;
         if (this._test_performDiskDelay)
             console.warn('DynaDiskMemory is working with _test_performDiskDelay not zero, this means will perform intentional delays, this should be not set like this on production');
     }
@@ -49,7 +49,7 @@ var DynaDiskMemory = /** @class */ (function () {
             var folder = fileInfo.folder;
             while (folder.length && folder !== _this._settings.diskPath.slice(0, -1)) {
                 foldersToDel.push(folder);
-                folder = folder.substr(0, folder.lastIndexOf('/'));
+                folder = folder.substring(0, folder.lastIndexOf(path.sep));
             }
             var folderToDel = foldersToDel.shift();
             var run = function () {
@@ -138,7 +138,7 @@ var DynaDiskMemory = /** @class */ (function () {
     DynaDiskMemory.prototype._writeFileOnDisk = function (folder, fileName, data) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var fullPath = "".concat(folder, "/").concat(fileName);
+            var fullPath = "".concat(folder).concat(path.sep).concat(fileName);
             setTimeout(function () {
                 fs.exists(fullPath, function (exists) {
                     if (exists)
@@ -162,7 +162,7 @@ var DynaDiskMemory = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
-                var fullFileName = "".concat(folder, "/").concat(fileName);
+                var fullFileName = "".concat(folder).concat(path.sep).concat(fileName);
                 fs.exists(fullFileName, function (exists) {
                     if (exists) {
                         fs.readFile(fullFileName, 'utf8', function (err, data) {
@@ -201,12 +201,12 @@ var DynaDiskMemory = /** @class */ (function () {
     DynaDiskMemory.prototype._generateFilename = function (container, key) {
         if (key === void 0) { key = ''; }
         var generatedContainer = this._getAsciiCodeHash(container);
-        var generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, '/');
-        var full = "".concat(this._settings.diskPath).concat(generatedContainer, "/").concat(generatedKey);
-        var folder = full.substr(0, full.lastIndexOf('/'));
-        var file = full.substr(full.lastIndexOf('/') + 1);
-        var containerBase = "".concat(generatedContainer, "/").concat(generatedKey);
-        containerBase = containerBase.substr(0, containerBase.lastIndexOf('/'));
+        var generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, path.sep);
+        var full = "".concat(this._settings.diskPath).concat(generatedContainer).concat(path.sep).concat(generatedKey);
+        var folder = full.substring(0, full.lastIndexOf(path.sep));
+        var file = full.substring(full.lastIndexOf(path.sep) + 1);
+        var containerBase = "".concat(generatedContainer).concat(path.sep).concat(generatedKey);
+        containerBase = containerBase.substring(0, containerBase.lastIndexOf(path.sep));
         return {
             full: full,
             folder: folder,
