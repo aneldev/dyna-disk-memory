@@ -138,7 +138,7 @@ var DynaDiskMemory = /** @class */ (function () {
     DynaDiskMemory.prototype._writeFileOnDisk = function (folder, fileName, data) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            var fullPath = "".concat(folder, "/").concat(fileName);
+            var fullPath = "".concat(folder).concat(path.sep).concat(fileName);
             setTimeout(function () {
                 fs.exists(fullPath, function (exists) {
                     if (exists)
@@ -162,7 +162,7 @@ var DynaDiskMemory = /** @class */ (function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             setTimeout(function () {
-                var fullFileName = "".concat(folder, "/").concat(fileName);
+                var fullFileName = "".concat(folder).concat(path.sep).concat(fileName);
                 fs.exists(fullFileName, function (exists) {
                     if (exists) {
                         fs.readFile(fullFileName, 'utf8', function (err, data) {
@@ -202,10 +202,10 @@ var DynaDiskMemory = /** @class */ (function () {
         if (key === void 0) { key = ''; }
         var generatedContainer = this._getAsciiCodeHash(container);
         var generatedKey = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, path.sep);
-        var full = "".concat(this._settings.diskPath).concat(generatedContainer, "/").concat(generatedKey);
+        var full = "".concat(this._settings.diskPath).concat(generatedContainer).concat(path.sep).concat(generatedKey);
         var folder = full.substring(0, full.lastIndexOf(path.sep));
         var file = full.substring(full.lastIndexOf(path.sep) + 1);
-        var containerBase = "".concat(generatedContainer, "/").concat(generatedKey);
+        var containerBase = "".concat(generatedContainer).concat(path.sep).concat(generatedKey);
         containerBase = containerBase.substring(0, containerBase.lastIndexOf(path.sep));
         return {
             full: full,

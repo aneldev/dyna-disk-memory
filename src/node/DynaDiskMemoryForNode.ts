@@ -153,7 +153,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
 
   private _writeFileOnDisk(folder: string, fileName: string, data: any): Promise<void> {
     return new Promise((resolve: () => void, reject: (error: any) => void) => {
-      const fullPath: string = `${folder}/${fileName}`;
+      const fullPath: string = `${folder}${path.sep}${fileName}`;
       setTimeout(() => {
         fs.exists(fullPath, (exists: boolean) => {
           if (exists) fs.unlinkSync(fullPath);
@@ -176,7 +176,7 @@ export class DynaDiskMemory implements IDynaDiskMemory {
   private _readFileFromDisk(folder: string, fileName: string): Promise<any> {
     return new Promise((resolve: (data: any) => void, reject: (error: any) => void) => {
       setTimeout(() => {
-        const fullFileName: string = `${folder}/${fileName}`;
+        const fullFileName: string = `${folder}${path.sep}${fileName}`;
         fs.exists(fullFileName, function (exists: boolean) {
           if (exists) {
             fs.readFile(fullFileName, 'utf8', (err: any, data: any) => {
@@ -217,10 +217,10 @@ export class DynaDiskMemory implements IDynaDiskMemory {
     const generatedContainer: string = this._getAsciiCodeHash(container);
     const generatedKey: string = this._splitText(this._getAsciiCodeHash(key), this._settings.fragmentSize || 13, path.sep);
 
-    const full: string = `${this._settings.diskPath}${generatedContainer}/${generatedKey}`;
+    const full: string = `${this._settings.diskPath}${generatedContainer}${path.sep}${generatedKey}`;
     const folder: string = full.substring(0, full.lastIndexOf(path.sep));
     const file: string = full.substring(full.lastIndexOf(path.sep) + 1);
-    let containerBase: string = `${generatedContainer}/${generatedKey}`;
+    let containerBase: string = `${generatedContainer}${path.sep}${generatedKey}`;
     containerBase = containerBase.substring(0, containerBase.lastIndexOf(path.sep));
 
     return {
